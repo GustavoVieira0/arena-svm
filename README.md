@@ -1,6 +1,7 @@
 # Arena de Personagens: prevendo batalhas Pokémon com SVM
 
-Projeto da disciplina **Inteligência Artificial II**.
+Projeto da disciplina **Inteligência Artificial II** · Ciência da Computação · FIB
+Professor: Ronaldo Cesar Dametto
 
 ## Problema
 Em jogos de batalha, os jogadores escolhem personagens sem saber quem tem vantagem no confronto. Este projeto investiga
