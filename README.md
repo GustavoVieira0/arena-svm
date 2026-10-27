@@ -17,11 +17,11 @@ sistema prevê o favorito, mostrando a confiança da previsão.
 ## Integrantes e responsabilidades
 | Integrante | Responsabilidade principal |
 |---|---|
-| Luan | Dados e análise exploratória (EDA) |
-| Gustavo | Pré-processamento, base de Pokémon e simulador de batalhas |
-| Anthony | Experimentos e avaliação dos modelos |
-| Lucas | Protótipo web (arena para 2 jogadores) |
-| Alceu | Comunicação, resumo expandido, vídeo e materiais |
+| Luan Carlos de Souza Ferreira | Dados e análise exploratória (EDA) |
+| Gustavo de Carvalho Vieira | Pré-processamento, base de Pokémon e simulador de batalhas |
+| Anthony Gabriel Schirato Lourenço | Experimentos e avaliação dos modelos |
+| Lucas Miguel Moreno Rios | Protótipo web (arena para 2 jogadores) |
+| Alceu Ferreira dos Santos Neto | Comunicação, resumo expandido, vídeo e materiais |
 
 ## Dados
 | Arquivo | Origem | Licença |
