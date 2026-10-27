@@ -28,11 +28,14 @@ sistema prevê o favorito, mostrando a confiança da previsão.
 |---|---|---|
 | `data/raw/pokeapi/*.csv` | [PokéAPI](https://github.com/PokeAPI/pokeapi), pasta `data/v2/csv`: atributos, tipos, gerações e tabela de eficácia de tipos | BSD-3-Clause |
 | `data/processed/pokemon.csv` | Gerado por `src/montar_base.py`: 1.242 Pokémon jogáveis das gerações 1–9 | derivado do PokéAPI |
-| `data/processed/batalhas.csv` | Gerado por `src/gerar_batalhas.py`: 40.000 confrontos, cada um simulado 21 vezes | gerado pelo grupo |
+| `data/processed/batalhas.csv` | Gerado por `src/gerar_batalhas.py`: 40.000 confrontos com **golpes reais**, cada um simulado 21 vezes | gerado pelo grupo |
+| `data/processed/batalhas_golpes_simples.csv` | Mesmos confrontos com golpes genéricos (versão 1), para comparação | gerado pelo grupo |
 
 **Por que um dataset de batalhas próprio?** O dataset público mais usado (*Pokemon Challenge*, Kaggle) cobre só as gerações
 1–6, e as batalhas dele foram geradas por um "algoritmo próprio" sem regras documentadas. O nosso simulador
-(`src/simulador.py`) usa a **fórmula de dano dos jogos principais**, com as simplificações descritas no topo do arquivo.
+(`src/simulador.py`) usa a **fórmula de dano dos jogos principais** e os **golpes que cada Pokémon realmente aprende**
+(poder, precisão, prioridade, acertos múltiplos, dano de retorno, roubo de vida, queda de atributos), escolhendo a cada
+turno o golpe de maior dano esperado. As simplificações (sem habilidades, itens, status ou trocas) estão no topo do arquivo.
 
 **Variável-alvo:** `a_vence` (1 se o Pokémon A venceu a maioria das 21 simulações).
 
@@ -52,7 +55,8 @@ arena-svm/
 ├── src/
 │   ├── montar_base.py        # PokéAPI -> pokemon.csv
 │   ├── simulador.py          # regras da batalha (fórmula de dano)
-│   └── gerar_batalhas.py     # pokemon.csv -> batalhas.csv (seed 42)
+│   ├── gerar_batalhas.py     # pokemon.csv -> batalhas.csv (seed 42)
+│   └── batalhar.py           # escolha dois Pokémon: previsão do SVM + simulação narrada
 ├── notebooks/
 │   └── 01_pipeline_duelo_svm.ipynb   # EDA, baselines, SVM e métricas (ponta a ponta)
 ├── modelos/                  # modelos treinados (.joblib)
@@ -67,7 +71,13 @@ python -m venv .venv
 pip install -r requirements.txt
 
 python src/montar_base.py       # opcional: o resultado já está versionado
-python src/gerar_batalhas.py    # opcional: cerca de 30 s, mesmo resultado com a seed 42
+python src/gerar_batalhas.py    # opcional: cerca de 1 min, mesmo resultado com a seed 42
+```
+Para batalhar dois Pokémon no terminal (escolha de geração, sorteio e batalha narrada):
+```bash
+python src/batalhar.py                     # modo interativo
+python src/batalhar.py charizard blastoise
+python src/batalhar.py --aleatorio 1 9     # sorteia A da geração 1 e B da geração 9
 ```
 Depois, abra `notebooks/01_pipeline_duelo_svm.ipynb` (VS Code ou Jupyter) e execute todas as células (cerca de 1 min).
 
@@ -79,14 +89,18 @@ Teste com 6.000 batalhas entre Pokémon das gerações 7–9, nunca vistos no tr
 
 | Modelo | Acurácia | F1 | ROC-AUC |
 |---|---|---|---|
-| Classe majoritária | 0,496 | 0,000 | 0,500 |
-| Vence o mais rápido | 0,674 | 0,678 | 0,701 |
-| Vence o maior Total | 0,795 | 0,797 | 0,885 |
-| Regressão Logística | 0,910 | 0,911 | 0,975 |
-| **SVM RBF (padrão)** | **0,922** | **0,922** | **0,981** |
+| Classe majoritária | 0,510 | 0,000 | 0,500 |
+| Vence o mais rápido | 0,678 | 0,675 | 0,713 |
+| Vence o maior Total | 0,806 | 0,802 | 0,898 |
+| Regressão Logística | 0,856 | 0,853 | 0,936 |
+| **SVM RBF (padrão)** | **0,866** | **0,863** | **0,935** |
+
+Com os golpes genéricos da versão 1 do simulador, o mesmo SVM chegava a 0,921. A queda mostra que o modelo ainda não
+sabe quais golpes cada Pokémon aprende (ex.: erra Pikachu × Gyarados, que o Pikachu vence com Volt Tackle). Incluir
+features de golpes é o experimento E2.
 
 ## Próximos passos (Checkpoint 2)
-E1: comparação de kernels · E2: atributos × atributos + tipos · E3: ajuste de C e gamma com validação cruzada agrupada por
+E1: comparação de kernels · E2: features de golpes (melhor golpe que cada um aprende contra o adversário) · E3: ajuste de C e gamma com validação cruzada agrupada por
 Pokémon · E4: medir o efeito do vazamento (divisão aleatória × por Pokémon) · E5: análise de erros (limiar de nocaute,
 imunidades, Shedinja).
 

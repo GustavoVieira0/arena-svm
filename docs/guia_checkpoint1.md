@@ -4,10 +4,10 @@
 | Tempo | Quem (sugestão) | O que mostrar | Onde |
 |---|---|---|---|
 | 0–2 min | Alceu | **Problema e pergunta:** "Dá para prever o favorito de uma batalha entre Pokémon que o modelo nunca viu, melhor que regras simples?" | README / notebook, seção 1 |
-| 2–4 min | Luan | **Dataset + 3 descobertas:** (1) o mais rápido vence só 67%; (2) com vantagem de tipo máxima, A vence 98%, e com desvantagem máxima, só 3%; (3) 83,5% dos confrontos têm sempre o mesmo vencedor, e só 2,9% são equilibrados (teto de acerto) | notebook, seções 2–3 |
-| 4–6 min | Anthony | **Baseline e 1º resultado:** "vence o mais rápido" 67,4%, "maior Total" 79,5%, Regressão Logística 91,0%, **SVM 92,2%** | notebook, seções 5–6 |
+| 2–4 min | Luan | **Dataset + 3 descobertas:** (1) o mais rápido vence só 70%; (2) o tipo pesa muito (82% × 18% nos extremos), mas golpes de cobertura reduzem a desvantagem; (3) 71% dos confrontos têm sempre o mesmo vencedor, e 5,7% são equilibrados (teto de acerto) | notebook, seções 2–3 |
+| 4–6 min | Anthony | **Baseline e 1º resultado:** "vence o mais rápido" 67,8%, "maior Total" 80,6%, Regressão Logística 85,6%, **SVM 86,6%** | notebook, seções 5–6 |
 | 6–8 min | Gustavo | **Pipeline ponta a ponta:** `montar_base.py` → `gerar_batalhas.py` → notebook "Run All" → modelo salvo | terminal + notebook |
-| 8–10 min | Lucas | **Próximo passo (03/11):** E1 kernels, E2 com/sem tipo, E3 C/gamma, E4 efeito do vazamento, E5 erros (Pikachu × Gyarados) + esboço da arena | notebook, seção 8 |
+| 8–10 min | Lucas | **Próximo passo (03/11):** E1 kernels, E2 features de golpes (o SVM erra Pikachu × Gyarados porque não sabe do Volt Tackle), E3 C/gamma, E4 efeito do vazamento + demo `batalhar.py` | notebook, seção 8 |
 
 > O professor pode perguntar a **qualquer integrante**. Todos devem saber explicar o projeto inteiro.
 
@@ -16,7 +16,7 @@
 |---|---|
 | **Entregas** | GitHub (publicar!) · `docs/Resumo_Expandido_Rascunho.docx` · `docs/referencias.md` · este guia · `docs/diario_ia.md` |
 | **A. Problema** | Seção 1 do notebook e README: problema, usuário (jogadores/fãs, app de 2 jogadores) e pergunta comparativa (SVM × regras simples, em Pokémon nunca vistos) |
-| **B. Dataset** | Fonte rastreável (PokéAPI + simulador com seed). 1.242 Pokémon × 18 colunas; 40.000 confrontos × 6 colunas. Ausentes: só `Type 2` (esperado). Duplicatas/formas cosméticas removidas (109). Outliers: Shedinja (HP 1), Blissey, Megas. Classes equilibradas (~50%). Escala: StandardScaler. **Vazamento:** divisão por geração, 0 Pokémon em comum |
+| **B. Dataset** | Fonte rastreável (PokéAPI + simulador com golpes reais e seed). 1.242 Pokémon × 18 colunas; 40.000 confrontos × 6 colunas. Ausentes: só `Type 2` (esperado). Duplicatas/formas cosméticas removidas (109). Outliers: Shedinja (HP 1), Blissey, Megas. Classes equilibradas (~50%). Escala: StandardScaler. **Vazamento:** divisão por geração, 0 Pokémon em comum |
 | **C. EDA** | 4 gráficos, cada um com uma pergunta no título; 5 descobertas interpretadas no fim da seção 3 |
 | **D. Preparação** | Limpeza justificada em `montar_base.py`; tipos (categóricos) transformados em multiplicador de eficácia; scaler dentro do Pipeline (ajustado só no treino) |
 | **E. Baseline** | 4 baselines com justificativa (tabela da seção 5) + métricas (acurácia, F1, ROC-AUC) |
@@ -46,13 +46,17 @@ git push -u origin main
 
 ## Perguntas prováveis (e respostas curtas)
 - **"Por que gerar o próprio dataset?"** O público cobre só as gerações 1–6, e as regras dele são desconhecidas. O nosso usa
-  a fórmula de dano oficial, tem regras documentadas e cobre as 9 gerações.
+  a fórmula de dano oficial e os golpes que cada Pokémon realmente aprende, tem regras documentadas e cobre as 9 gerações.
+- **"Os golpes são reais?"** Sim: vêm da lista oficial de golpes aprendidos (PokéAPI), com poder, precisão, prioridade e
+  efeitos. Ficam de fora habilidades, itens e golpes de status.
 - **"Então o modelo não está só reaprendendo a regra de vocês?"** Ele recebe só atributos e tipos, não a fórmula nem a
   sorte. A pergunta é se o SVM consegue aproximar o resultado de um processo não linear e com aleatoriedade, em Pokémon
-  nunca vistos. Regras simples como "o mais rápido vence" acertam só 67%.
+  nunca vistos. Regras simples como "o mais rápido vence" acertam só 68%.
 - **"Como evitaram vazamento?"** Treino com gerações 1–6 e teste com 7–9. Nenhum Pokémon aparece nos dois.
 - **"Por que acurácia?"** As classes estão equilibradas (cerca de 50%). Usamos também F1 e ROC-AUC.
-- **"O SVM é muito melhor que a Regressão Logística?"** Ainda não: 92,2% contra 91,0%. Investigar se a não linearidade
+- **"O SVM é muito melhor que a Regressão Logística?"** Ainda não: 86,6% contra 85,6%. Investigar se a não linearidade
   compensa é exatamente o experimento E1 do próximo checkpoint.
-- **"Qual o teto de acerto?"** Cerca de 2,9% dos confrontos são equilibrados (A vence entre 30% e 70%). Nesses, nenhum
-  modelo acerta sempre, e o SVM erra cerca de 50% deles, como esperado.
+- **"Por que caiu de 92% para 87% com golpes reais?"** O modelo só vê atributos e tipos, não os golpes. Um Pokémon com
+  um golpe de cobertura ou muito forte (Volt Tackle, Overheat) surpreende o modelo. Incluir isso é o experimento E2.
+- **"Qual o teto de acerto?"** Cerca de 5,7% dos confrontos são equilibrados (A vence entre 30% e 70%). Nesses, nenhum
+  modelo acerta sempre, e o SVM erra cerca de 47% deles, como esperado.

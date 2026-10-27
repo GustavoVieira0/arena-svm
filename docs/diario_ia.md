@@ -67,6 +67,16 @@ grupo verificou.
 - **Verificação pendente (grupo):** conferir a fórmula de dano com a Bulbapedia; conferir as referências; reexecutar o
   pipeline em outra máquina.
 
+### 20/10/2026: golpes reais no simulador
+- **Prompt:** "Acha mesmo que o Dialga perderia [para o Slither Wing]? Implemente os golpes reais no simulador."
+- **Uso:** a IA explicou o resultado (no simulador v1, todo golpe tinha 80 de poder) e reescreveu `src/simulador.py` para
+  usar os golpes que cada Pokémon aprende (PokéAPI), com precisão, prioridade, acertos múltiplos, recuo, dreno e queda de
+  atributos. A versão 1 foi mantida para comparação. O SVM caiu de 92,1% para 86,6%, o que motivou o experimento E2.
+- **Verificação:** confrontos conhecidos conferidos (Dialga usa Overheat contra o Slither Wing; Pikachu nocauteia o
+  Gyarados com Volt Tackle; Garchomp usa golpe Lutador contra o Weavile). O caso do Magikarp com Hydro Pump foi
+  investigado: o dado vem do TR03 de Sword/Shield, então está correto. Formas de aprendizado especiais (Colosseum/XD,
+  Stadium) foram excluídas.
+
 ---
 
 ### Modelo para novos registros
