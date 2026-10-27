@@ -5,3 +5,6 @@ __pycache__/
 .vscode/
 .DS_Store
 ~$*
+
+# PDFs de artigos (direitos das editoras): guardar só localmente
+docs/artigos/pdfs/
