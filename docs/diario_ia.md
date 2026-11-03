@@ -77,6 +77,17 @@ grupo verificou.
   investigado: o dado vem do TR03 de Sword/Shield, então está correto. Formas de aprendizado especiais (Colosseum/XD,
   Stadium) foram excluídas.
 
+### 03/11/2026: experimentos do Checkpoint 2
+- **Integrante:** Gustavo · **Ferramenta:** Claude Code (app desktop), Claude Opus 5.5
+- **Prompt (resumo):** checklist do Checkpoint 2 (três experimentos controlados, hipóteses, baseline, métricas, três
+  erros, conclusões).
+- **Uso:** a IA criou `src/features.py` (features de golpes) e o notebook `02_experimentos_svm.ipynb` com E1–E5,
+  seguindo as hipóteses que já estavam registradas no notebook 01 (20/10). As interpretações foram escritas **depois** de
+  ver os resultados, incluindo as hipóteses refutadas (E3 e E4). A demo passou a usar o modelo v2.
+- **Verificação:** notebook executado do início ao fim sem erros; a grade do E3 conferida no gráfico; os casos de erro
+  conferidos com batalhas narradas pelo simulador. **Pendente (grupo):** revisar as interpretações e saber explicar
+  por que o E4 não mostrou vazamento.
+
 ---
 
 ### Modelo para novos registros

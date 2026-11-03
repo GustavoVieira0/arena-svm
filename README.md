@@ -57,9 +57,11 @@ arena-svm/
 │   ├── montar_base.py        # PokéAPI -> pokemon.csv
 │   ├── simulador.py          # regras da batalha (fórmula de dano)
 │   ├── gerar_batalhas.py     # pokemon.csv -> batalhas.csv (seed 42)
+│   ├── features.py           # features da batalha (atributos, tipos e golpes)
 │   └── batalhar.py           # escolha dois Pokémon: previsão do SVM + simulação narrada
 ├── notebooks/
-│   └── 01_pipeline_duelo_svm.ipynb   # EDA, baselines, SVM e métricas (ponta a ponta)
+│   ├── 01_pipeline_duelo_svm.ipynb   # Checkpoint 1: EDA, baselines, SVM e métricas (ponta a ponta)
+│   └── 02_experimentos_svm.ipynb     # Checkpoint 2: experimentos E1–E5, erros e conclusões
 ├── modelos/                  # modelos treinados (.joblib)
 └── docs/                     # resumo expandido, referências, diário de IA, guia do checkpoint
 ```
@@ -80,10 +82,10 @@ python src/batalhar.py                     # modo interativo
 python src/batalhar.py charizard blastoise
 python src/batalhar.py --aleatorio 1 9     # sorteia A da geração 1 e B da geração 9
 ```
-Depois, abra `notebooks/01_pipeline_duelo_svm.ipynb` (VS Code ou Jupyter) e execute todas as células (cerca de 1 min).
+Depois, abra os notebooks em `notebooks/` (VS Code ou Jupyter) e execute todas as células (01: cerca de 1 min; 02: cerca de 5 min).
 
 **Parâmetros principais:** `SEED = 42`; nível 50; 21 simulações por confronto; 30.000 confrontos de treino, 6.000 de teste
-e 4.000 mistos; SVM RBF com `C = 1` e `gamma = "scale"`.
+e 4.000 mistos; modelo final: SVM RBF com `C = 10` e `gamma = 0,05` (escolhidos no E3) e 15 features.
 
 ## Resultados preliminares (Checkpoint 1)
 Teste com 6.000 batalhas entre Pokémon das gerações 7–9, nunca vistos no treino:
@@ -100,10 +102,19 @@ Com os golpes genéricos da versão 1 do simulador, o mesmo SVM chegava a 0,921.
 sabe quais golpes cada Pokémon aprende (ex.: erra Pikachu × Gyarados, que o Pikachu vence com Volt Tackle). Incluir
 features de golpes é o experimento E2.
 
-## Próximos passos (Checkpoint 2)
-E1: comparação de kernels · E2: features de golpes (melhor golpe que cada um aprende contra o adversário) · E3: ajuste de C e gamma com validação cruzada agrupada por
-Pokémon · E4: medir o efeito do vazamento (divisão aleatória × por Pokémon) · E5: análise de erros (limiar de nocaute,
-imunidades, Shedinja).
+## Experimentos (Checkpoint 2)
+Notebook `notebooks/02_experimentos_svm.ipynb` · guia em `docs/guia_checkpoint2.md`.
+
+| Experimento | Hipótese (registrada em 20/10) | Resultado |
+|---|---|---|
+| E1: kernel linear × polinomial × RBF | RBF supera o linear | Confirmada, mas fraca: 85,6% → 86,6% |
+| E2: features dos golpes reais | Recupera a queda causada pelos golpes reais | Confirmada: **86,6% → 92,6%** |
+| E3: ajuste de C e gamma (validação nas gerações 5–6) | Ganho pequeno | Sem ganho: 92,6% → 92,6% |
+| E4: divisão aleatória × por geração | A divisão aleatória infla o resultado | Refutada: 92,5% × 92,6% (features relativas, sem identidade do Pokémon) |
+| E5: análise de erros | | Erros concentrados em confrontos decididos pela sorte e em duelos de nocaute em 1 golpe |
+
+**Modelo final (v2):** SVM RBF, 15 features, **92,6%** de acurácia e ROC-AUC 0,977 no teste, salvo em
+`modelos/svm_duelo_v2.joblib` e usado pela demo `src/batalhar.py`.
 
 ## Uso de IA
 O uso de ferramentas de IA está registrado em `docs/diario_ia.md`.

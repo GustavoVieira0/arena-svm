@@ -1,0 +1,1 @@
+{"features": ["dif_HP", "dif_Attack", "dif_Defense", "dif_Sp. Atk", "dif_Sp. Def", "dif_Speed", "log_mult_a", "log_mult_b", "frac_a", "frac_b", "nocaute_a", "nocaute_b", "dif_nocaute", "prioridade_a", "prioridade_b"], "C": 10, "gamma": 0.05}

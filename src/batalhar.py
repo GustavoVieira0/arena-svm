@@ -8,35 +8,27 @@ Uso:
     python src/batalhar.py --aleatorio 1 9    (sorteia A da geração 1 e B da geração 9)
 """
 import difflib
+import json
 import sys
 
 import joblib
 import numpy as np
 import pandas as pd
 
-from simulador import RAIZ, Lutador, batalha, candidatos, eficacia, multiplicador
+from features import Extrator
+from simulador import RAIZ, Lutador, batalha, candidatos, multiplicador
 
-ATRIBUTOS = ["HP", "Attack", "Defense", "Sp. Atk", "Sp. Def", "Speed"]
 N_BATALHAS = 201
 
 pk = pd.read_csv(RAIZ / "data/processed/pokemon.csv").set_index("name")
-modelo = joblib.load(RAIZ / "modelos/svm_duelo_v1.joblib")
-
-
-def melhor_mult(tipos_atk, t1, t2):
-    """Mesmo cálculo de feature usado no notebook: multiplicador do melhor golpe (STAB × eficácia)."""
-    opcoes = [1.5 * eficacia(t, t1, t2) for t in tipos_atk if isinstance(t, str)]
-    if "Normal" not in tipos_atk:
-        opcoes.append(eficacia("Normal", t1, t2))
-    return max(opcoes) if max(opcoes) > 0 else 1.0
+extrator = Extrator(pk.reset_index())
+# modelo final do Checkpoint 2 (notebooks/02_experimentos_svm.ipynb): SVM RBF com features de atributos, tipos e golpes
+modelo = joblib.load(RAIZ / "modelos/svm_duelo_v2.joblib")
+COLUNAS = json.load(open(RAIZ / "modelos/svm_duelo_v2.json"))["features"]
 
 
 def features(a, b):
-    ra, rb = pk.loc[a], pk.loc[b]
-    x = {f"dif_{at}": ra[at] - rb[at] for at in ATRIBUTOS}
-    x["log_mult_a"] = np.log2(melhor_mult((ra["Type 1"], ra["Type 2"]), rb["Type 1"], rb["Type 2"]))
-    x["log_mult_b"] = np.log2(melhor_mult((rb["Type 1"], rb["Type 2"]), ra["Type 1"], ra["Type 2"]))
-    return pd.DataFrame([x])
+    return pd.DataFrame([extrator.linha(pk.loc[a, "pokeapi_id"], pk.loc[b, "pokeapi_id"])])[COLUNAS]
 
 
 PALAVRAS_SORTEIO = {"", "?", "sorteio", "sortear", "aleatorio", "aleatório", "random"}
