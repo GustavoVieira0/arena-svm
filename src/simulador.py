@@ -230,18 +230,24 @@ def _sortear_acertos(g, rng):
     return int(rng.integers(lo, hi + 1))
 
 
-def usar_golpe(g, atacante, defensor, est_a, est_d, rng):
-    """Executa o golpe. Retorna (dano causado no alvo, variação de HP do atacante); dano None = errou."""
+def usar_golpe(g, atacante, defensor, est_a, est_d, rng, detalhe=None):
+    """Executa o golpe. Retorna (dano causado no alvo, variação de HP do atacante); dano None = errou.
+    `detalhe` (dict, opcional) recebe número de acertos e de críticos, para a animação da arena."""
     hp_atacante = -math.floor(atacante.hp * g.custo_hp)
     if rng.random() >= g.precisao:
         return None, hp_atacante
     mult = multiplicador(g, atacante, defensor)
     total = 0
-    for _ in range(_sortear_acertos(g, rng)):
+    acertos = _sortear_acertos(g, rng)
+    criticos = 0
+    for _ in range(acertos):
         crit = g.estagio_critico >= 3 or rng.random() < CHANCE_CRITICO[min(g.estagio_critico, 2)]
+        criticos += crit
         base = dano_base(g, atacante, defensor, est_a, est_d, crit)
         d = math.floor(math.floor(base * rng.integers(85, 101) / 100 * (MULT_CRITICO if crit else 1)) * mult)
         total += max(1, d)
+    if detalhe is not None:
+        detalhe.update(acertos=acertos, criticos=criticos)
     if g.dreno:
         hp_atacante += math.floor(total * g.dreno) if g.dreno > 0 else -max(1, math.floor(total * -g.dreno))
     for stat, delta in g.muda_usuario:
@@ -252,8 +258,9 @@ def usar_golpe(g, atacante, defensor, est_a, est_d, rng):
     return total, hp_atacante
 
 
-def batalha(a, b, rng, cand_a=None, cand_b=None, max_turnos=200, registro=None):
-    """Simula uma batalha. Retorna True se A vencer. `registro` (lista) recebe a narração turno a turno."""
+def batalha(a, b, rng, cand_a=None, cand_b=None, max_turnos=200, registro=None, eventos=None):
+    """Simula uma batalha. Retorna True se A vencer.
+    `registro` (lista) recebe a narração em texto; `eventos` (lista) recebe um dicionário por ataque (para a arena)."""
     cand_a = cand_a or candidatos(a, b)
     cand_b = cand_b or candidatos(b, a)
     hp = {"a": a.hp, "b": b.hp}
@@ -268,9 +275,19 @@ def batalha(a, b, rng, cand_a=None, cand_b=None, max_turnos=200, registro=None):
         primeiro = "a" if chave["a"] > chave["b"] or (chave["a"] == chave["b"] and rng.random() < 0.5) else "b"
         for k in (primeiro, outro[primeiro]):
             alvo = outro[k]
-            dano, dhp = usar_golpe(escolha[k], lut[k], lut[alvo], est[k], est[alvo], rng)
+            detalhe = {} if eventos is not None else None
+            dano, dhp = usar_golpe(escolha[k], lut[k], lut[alvo], est[k], est[alvo], rng, detalhe)
             hp[alvo] -= dano or 0
             hp[k] = min(lut[k].hp, hp[k] + dhp)
+            if eventos is not None:
+                g = escolha[k]
+                eventos.append({
+                    "turno": turno, "atacante": k, "golpe": g.nome, "tipo": g.tipo,
+                    "categoria": "físico" if g.fisico else "especial",
+                    "dano": dano, "errou": dano is None, "eficacia": eficacia(g.tipo, *lut[alvo].tipos),
+                    "acertos": detalhe.get("acertos", 0), "criticos": detalhe.get("criticos", 0),
+                    "hp_atacante_variou": dhp, "hp": {"a": max(hp["a"], 0), "b": max(hp["b"], 0)},
+                })
             if registro is not None:
                 efeito = "errou!" if dano is None else f"{dano} de dano"
                 registro.append(f"T{turno}: {lut[k].nome} usa {escolha[k].nome} → {efeito} "

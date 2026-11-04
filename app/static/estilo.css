@@ -1,0 +1,214 @@
+:root {
+  --fundo: #1b1f2e;
+  --cartao: #262b3f;
+  --borda: #3a4160;
+  --texto: #eef1f8;
+  --suave: #9aa3bf;
+  --destaque: #ffcb05;
+  --azul: #3d7dca;
+  --verde: #3fbf5f;
+  --amarelo: #f2c230;
+  --vermelho: #e2453c;
+  --pixel: "Press Start 2P", monospace;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--fundo); color: var(--texto);
+  font-family: Inter, system-ui, sans-serif; min-height: 100vh;
+}
+[hidden] { display: none !important; }
+
+.topo { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; border-bottom: 3px solid var(--borda); }
+.topo h1 { margin: 0; font-family: var(--pixel); font-size: 20px; letter-spacing: 2px; }
+.topo h1 span { color: var(--destaque); }
+#info-sala { font-family: var(--pixel); font-size: 11px; color: var(--suave); }
+#info-sala b { color: var(--destaque); }
+
+.tela { padding: 20px; max-width: 1200px; margin: 0 auto; }
+.cartao { background: var(--cartao); border: 3px solid var(--borda); border-radius: 10px; padding: 16px; }
+h2 { font-family: var(--pixel); font-size: 12px; margin: 0 0 12px; color: var(--destaque); }
+
+/* início */
+.inicio { max-width: 420px; margin: 40px auto; display: flex; flex-direction: column; gap: 12px; }
+.subtitulo { margin: 0 0 6px; color: var(--suave); line-height: 1.5; }
+label { display: flex; flex-direction: column; gap: 6px; font-weight: 600; font-size: 14px; }
+input, select {
+  font: inherit; padding: 10px 12px; border-radius: 8px; border: 2px solid var(--borda);
+  background: #151927; color: var(--texto);
+}
+.ou { text-align: center; color: var(--suave); font-size: 13px; }
+.erro { color: var(--vermelho); min-height: 1em; margin: 0; }
+
+.botao {
+  font-family: var(--pixel); font-size: 11px; padding: 12px 14px; border-radius: 8px; cursor: pointer;
+  border: 3px solid #0b0d14; background: #4a5175; color: #fff; box-shadow: 0 4px 0 #0b0d14;
+  transition: transform .05s;
+}
+.botao:active { transform: translateY(3px); box-shadow: 0 1px 0 #0b0d14; }
+.botao.principal { background: var(--vermelho); }
+.botao.roleta { background: var(--azul); white-space: nowrap; }
+.botao.pequeno { padding: 6px 8px; font-size: 9px; box-shadow: 0 2px 0 #0b0d14; }
+.botao:disabled { opacity: .45; cursor: not-allowed; }
+
+/* escolha */
+#tela-escolha { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 16px; }
+@media (max-width: 900px) { #tela-escolha { grid-template-columns: 1fr; } }
+.filtros { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+.filtros input { flex: 1; min-width: 140px; }
+.grade {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 8px;
+  max-height: 62vh; overflow-y: auto; padding-right: 4px;
+}
+.poke {
+  background: #1d2234; border: 2px solid var(--borda); border-radius: 8px; padding: 4px; cursor: pointer;
+  text-align: center; font-size: 11px; color: var(--suave);
+}
+.poke:hover { border-color: var(--destaque); color: var(--texto); }
+.poke.sel { border-color: var(--destaque); background: #2f3450; color: var(--texto); }
+.poke img { width: 72px; height: 72px; image-rendering: pixelated; display: block; margin: 0 auto; }
+.dica { color: var(--suave); font-size: 12px; margin: 8px 0 0; }
+
+.lateral { display: flex; flex-direction: column; gap: 16px; }
+.escolhido { min-height: 220px; display: flex; flex-direction: column; align-items: center; gap: 8px; margin-bottom: 12px; }
+.escolhido.vazio { justify-content: center; color: var(--suave); font-size: 13px; text-align: center; }
+.escolhido img { width: 128px; height: 128px; image-rendering: pixelated; object-fit: contain; }
+.escolhido .nome { font-family: var(--pixel); font-size: 12px; }
+#btn-pronto { width: 100%; }
+.tipos { display: flex; gap: 6px; justify-content: center; }
+.tipo { font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 4px; color: #fff; text-shadow: 0 1px 0 #0006; }
+.stats { width: 100%; font-size: 11px; display: grid; grid-template-columns: 52px 30px 1fr; gap: 3px 6px; align-items: center; }
+.stats .b { height: 6px; background: #151927; border-radius: 3px; overflow: hidden; }
+.stats .b div { height: 100%; background: var(--azul); }
+.adversario { font-size: 14px; color: var(--suave); margin-bottom: 10px; }
+.adversario .ok { color: var(--verde); font-weight: 700; }
+.convite p { font-size: 12px; color: var(--suave); margin: 6px 0; }
+.link { display: flex; gap: 6px; align-items: center; }
+.link code { flex: 1; font-size: 12px; background: #151927; padding: 6px 8px; border-radius: 6px; overflow-wrap: anywhere; color: var(--destaque); }
+
+/* arena */
+#tela-arena { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 16px; }
+@media (max-width: 900px) { #tela-arena { grid-template-columns: 1fr; } }
+.arena-wrap { border: 4px solid #0b0d14; border-radius: 10px; overflow: hidden; }
+.arena {
+  position: relative; aspect-ratio: 16 / 10; width: 100%;
+  background: linear-gradient(#9fd8f5 0%, #c9ecf9 45%, #9ed27c 46%, #7fbf5e 100%);
+}
+.plataforma { position: absolute; border-radius: 50%; background: radial-gradient(#d8e8a0, #a9c66b); border: 3px solid #7fa04a; }
+.plat-op { width: 30%; height: 9%; right: 9%; top: 41%; }
+.plat-eu { width: 36%; height: 11%; left: 5%; bottom: 6%; }
+/* Sprites ancorados pela base (pés) no centro da plataforma; altura definida em sprites.js (ajustarSprite). */
+.sprite {
+  position: absolute; image-rendering: pixelated; z-index: 1;
+  --dx: 0px; --dy: 0px; --flip: 1; --pad: 0%;
+  transform: translateX(-50%) translateY(var(--pad)) translate(var(--dx), var(--dy)) scaleX(var(--flip));
+  transform-origin: bottom center; transition: transform .15s, opacity .4s;
+}
+.sprite-op { left: 76%; bottom: 53%; }
+.sprite-eu { left: 23%; bottom: 10%; }
+.sprite.ataca-op { --dx: -40px; --dy: 25px; }
+.sprite.ataca-eu { --dx: 40px; --dy: -25px; }
+.sprite.dano { animation: piscar .5s steps(2) 2; }
+.sprite.desmaio { --dy: 60px; opacity: 0; }
+.placa { z-index: 2; }
+@keyframes piscar { 50% { opacity: 0; } }
+
+.placa {
+  position: absolute; background: #f8f8e8; color: #222; border: 3px solid #404040; border-radius: 8px;
+  padding: 6px 10px; width: 40%; font-family: var(--pixel); font-size: clamp(7px, 1.1vw, 11px);
+  box-shadow: 4px 4px 0 #0004;
+}
+.placa-oponente { left: 4%; top: 6%; }
+.placa-eu { right: 4%; bottom: 8%; }
+.placa-nome { display: flex; justify-content: space-between; margin-bottom: 6px; text-transform: capitalize; }
+.nivel { color: #555; }
+.hp { display: flex; align-items: center; gap: 6px; }
+.hp span { color: #e08a00; }
+.barra { flex: 1; height: 9px; background: #555; border-radius: 5px; padding: 2px; }
+.barra div { height: 100%; width: 100%; border-radius: 3px; background: var(--verde); transition: width .8s ease, background .3s; }
+.hp-num { text-align: right; margin-top: 4px; }
+
+.caixa-texto {
+  background: #303a52; color: #fff; border-top: 4px solid #0b0d14; min-height: 88px; padding: 16px 18px;
+  font-family: var(--pixel); font-size: clamp(9px, 1.3vw, 13px); line-height: 1.8;
+}
+.painel-ia { display: flex; flex-direction: column; gap: 12px; font-size: 14px; line-height: 1.5; }
+.painel-ia .grande { font-family: var(--pixel); font-size: 12px; color: var(--destaque); text-transform: capitalize; }
+.conf { height: 10px; background: #151927; border-radius: 5px; overflow: hidden; margin: 4px 0 8px; }
+.conf div { height: 100%; background: var(--destaque); }
+.veredito {
+  font-family: var(--pixel); font-size: 10px; padding: 9px 10px; border-radius: 8px; line-height: 1.6;
+  display: flex; justify-content: space-between; align-items: center; gap: 8px;
+}
+.veredito span { font-family: Inter, system-ui, sans-serif; font-size: 13px; font-weight: 600; }
+.veredito.certo { background: #1f4d2c; color: #8ff0a8; }
+.veredito.errado { background: #5a2020; color: #ffb0a8; }
+.vencedor { font-family: var(--pixel); font-size: 13px; text-align: center; line-height: 1.6; }
+.acoes .botao { width: 100%; }
+
+/* ---------- explicação da IA (conceitos do SVM) ---------- */
+#explicacao { border-top: 2px solid var(--borda); padding-top: 10px; }
+#explicacao .explica-titulo { font-family: var(--pixel); font-size: 10px; color: var(--destaque); line-height: 1.7; margin-bottom: 6px; }
+#explicacao .explica-titulo .dica { font-family: Inter, system-ui, sans-serif; font-size: 11px; }
+#explicacao .topico { background: #1d2234; border: 2px solid var(--borda); border-radius: 8px; margin: 6px 0; }
+#explicacao .topico summary { cursor: pointer; padding: 8px 10px; font-weight: 600; font-size: 13px; list-style: none; }
+#explicacao .topico summary::before { content: "▸ "; color: var(--destaque); }
+#explicacao .topico[open] summary::before { content: "▾ "; }
+#explicacao .topico summary::-webkit-details-marker { display: none; }
+#explicacao .bloco { padding: 0 10px 10px; }
+#explicacao .explica { font-size: 12px; color: var(--suave); margin: 0 0 8px; line-height: 1.45; }
+.regua { position: relative; height: 34px; margin: 6px 4px 2px; }
+.regua .eixo { position: absolute; top: 16px; left: 0; right: 0; height: 2px; background: var(--borda); }
+.regua .margem { position: absolute; top: 6px; height: 22px; background: #ffcb0522; border: 1px dashed #ffcb0588; border-radius: 4px; }
+.regua .hiperplano { position: absolute; top: 2px; width: 2px; height: 30px; background: var(--destaque); }
+.regua .ponto { position: absolute; top: 9px; width: 16px; height: 16px; border-radius: 50%; background: #fff; border: 3px solid var(--vermelho); transform: translateX(-50%); }
+.regua-legenda { display: flex; justify-content: space-between; font-size: 11px; color: var(--suave); text-transform: capitalize; }
+.fator { display: grid; grid-template-columns: 1fr 1fr; align-items: center; margin: 3px 0; font-size: 12px; }
+.fator .nome { grid-column: 1 / -1; color: var(--texto); font-size: 12px; }
+.fator .lado { height: 10px; display: flex; }
+.fator .lado.b { justify-content: flex-end; border-right: 2px solid var(--borda); }
+.fator .lado div { height: 100%; border-radius: 3px; }
+.fator .lado.b div { background: #6c8fd8; }
+.fator .lado.a div { background: #e07a5f; }
+.lados { display: flex; justify-content: space-between; font-size: 11px; color: var(--suave); text-transform: capitalize; }
+.comparou { width: 100%; font-size: 12px; border-collapse: collapse; }
+.comparou td, .comparou th { padding: 3px 4px; border-bottom: 1px solid var(--borda); text-align: center; }
+.comparou td:first-child, .comparou th:first-child { text-align: left; color: var(--suave); }
+.comparou th { text-transform: capitalize; font-weight: 600; }
+.vetor { display: flex; align-items: center; gap: 6px; padding: 5px 0; border-bottom: 1px solid var(--borda); font-size: 12px; }
+.vetor img { width: 34px; height: 34px; image-rendering: pixelated; }
+.vetor .txt { flex: 1; line-height: 1.35; }
+.puxa-a { color: #f2a48f; } .puxa-b { color: #9fb8ee; }
+
+/* ---------- celular: barra fixa no rodapé com o Pokémon escolhido e os botões ---------- */
+@media (max-width: 900px) {
+  .topo { padding: 10px 14px; }
+  .topo h1 { font-size: 15px; }
+  .tela { padding: 12px; }
+  .lateral { order: -1; }                        /* status do adversário em cima da grade */
+  #tela-escolha { padding-bottom: 110px; }
+  .grade { max-height: none; grid-template-columns: repeat(auto-fill, minmax(74px, 1fr)); gap: 6px; }
+  .poke { font-size: 10px; }
+  .poke img { width: 54px; height: 54px; }
+  .convite p { font-size: 11px; }
+
+  #cartao-meu {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; border-radius: 14px 14px 0 0;
+    padding: 10px 12px; display: flex; align-items: center; gap: 10px; box-shadow: 0 -6px 20px #0009;
+  }
+  #cartao-meu h2, #cartao-meu .stats { display: none; }
+  #cartao-meu .escolhido {
+    flex: 1; min-height: 0; margin: 0; flex-direction: row; flex-wrap: wrap; justify-content: flex-start;
+    align-items: center; gap: 4px 8px;
+  }
+  #cartao-meu .escolhido img { width: 54px; height: 54px; }
+  #cartao-meu .escolhido .nome { font-size: 10px; }
+  #cartao-meu .escolhido.vazio { font-size: 12px; text-align: left; }
+  #btn-pronto { width: auto; flex-shrink: 0; padding: 14px 16px; }
+
+  #tela-arena { padding-bottom: 90px; }
+  .painel-ia { font-size: 13px; }
+  #acoes {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; padding: 10px 12px;
+    background: var(--cartao); border-top: 3px solid var(--borda); box-shadow: 0 -6px 20px #0009;
+  }
+}

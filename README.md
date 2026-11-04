@@ -67,7 +67,7 @@ arena-svm/
 ```
 
 ## Como executar
-Requisitos: Python 3.10 ou superior.
+Requisitos: Python 3.11 ou superior (testado no 3.12). As versões das bibliotecas estão fixadas no `requirements.txt` porque o modelo salvo depende da versão do scikit-learn.
 ```bash
 python -m venv .venv
 .venv\Scripts\activate          # Windows  (Linux/Mac: source .venv/bin/activate)
@@ -101,6 +101,24 @@ Teste com 6.000 batalhas entre Pokémon das gerações 7–9, nunca vistos no tr
 Com os golpes genéricos da versão 1 do simulador, o mesmo SVM chegava a 0,921. A queda mostra que o modelo ainda não
 sabe quais golpes cada Pokémon aprende (ex.: erra Pikachu × Gyarados, que o Pikachu vence com Volt Tackle). Incluir
 features de golpes é o experimento E2.
+
+## Arena: jogo para dois jogadores
+Aplicação web em `app/`: cada jogador escolhe (ou sorteia na roleta) um Pokémon de qualquer geração, a IA mostra quem
+ela acha que vence, e a batalha é animada com os sprites dos jogos.
+
+1. Dê dois cliques em `jogar.bat` (ou rode `.venv\Scripts\python app\servidor.py`).
+2. Clique em **Criar sala**. Aparece um código (ex.: `PK7Q`) e um link.
+3. O segundo jogador, **na mesma rede Wi-Fi**, abre o link no celular ou no computador (ou digita o código).
+4. Cada um escolhe o Pokémon e clica em **Pronto!**. A batalha aparece para os dois.
+
+**Por que a IA apostou assim?** Durante a batalha, o painel lateral explica a previsão com os conceitos do SVM
+(`app/explicacao.py`): a posição da batalha em relação à **fronteira de decisão e à margem** (score), o **peso de cada
+fator** nesta batalha (estimado neutralizando cada grupo de features), os valores que o modelo comparou e os
+**vetores de suporte** (batalhas do treino) que mais influenciaram a decisão. Uma página para validar os sprites de todos
+os Pokémon fica em `http://localhost:5000/static/galeria.html`.
+
+Na primeira vez, o Windows pode perguntar sobre o firewall: permita o acesso em **redes privadas**. Os sprites são
+carregados do repositório [PokeAPI/sprites](https://github.com/PokeAPI/sprites), então é preciso internet.
 
 ## Experimentos (Checkpoint 2)
 Notebook `notebooks/02_experimentos_svm.ipynb` · guia em `docs/guia_checkpoint2.md`.

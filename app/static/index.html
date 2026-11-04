@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Arena SVM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/estilo.css">
+</head>
+<body>
+
+<header class="topo">
+  <h1>ARENA <span>SVM</span></h1>
+  <div id="info-sala" hidden>Sala <b id="codigo-topo"></b></div>
+</header>
+
+<!-- Tela 1: início -->
+<main id="tela-inicio" class="tela">
+  <section class="cartao inicio">
+    <p class="subtitulo">Escolha seu Pokémon, desafie um amigo e veja se a IA acerta quem vence.</p>
+    <label>Seu nome
+      <input id="nome" maxlength="20" placeholder="Ex.: Ash">
+    </label>
+    <button id="btn-criar" class="botao principal">Criar sala</button>
+    <div class="ou">ou</div>
+    <label>Código da sala
+      <input id="codigo" maxlength="4" placeholder="Ex.: PK7Q" style="text-transform:uppercase">
+    </label>
+    <button id="btn-entrar" class="botao">Entrar na sala</button>
+    <p id="erro-inicio" class="erro"></p>
+  </section>
+</main>
+
+<!-- Tela 2: escolha -->
+<main id="tela-escolha" class="tela" hidden>
+  <section class="cartao espectador-aviso" id="aviso-espectador" hidden>
+    <h2>Você está assistindo</h2>
+    <p>A sala já tem dois jogadores. Você vai ver as batalhas assim que eles estiverem prontos.</p>
+    <p class="dica">Para jogar, volte ao início e crie uma sala nova.</p>
+  </section>
+  <section class="cartao escolha" id="cartao-grade">
+    <div class="filtros">
+      <select id="filtro-geracao">
+        <option value="">Todas as gerações</option>
+      </select>
+      <input id="filtro-busca" placeholder="Buscar Pokémon...">
+      <button id="btn-roleta" class="botao roleta">🎲 Roleta</button>
+    </div>
+    <div id="grade" class="grade"></div>
+    <p id="grade-info" class="dica"></p>
+  </section>
+
+  <aside class="lateral">
+    <section class="cartao" id="cartao-meu">
+      <h2>Seu Pokémon</h2>
+      <div id="escolhido" class="escolhido vazio">Escolha na lista ou gire a roleta</div>
+      <button id="btn-pronto" class="botao principal" disabled>Pronto!</button>
+    </section>
+    <section class="cartao">
+      <h2 id="titulo-adv">Adversário</h2>
+      <div id="adversario" class="adversario">Aguardando outro jogador...</div>
+      <div id="convite" class="convite">
+        <p>Para o outro jogador entrar (mesma rede Wi-Fi), envie o link:</p>
+        <div class="link"><code id="link-sala"></code><button id="btn-copiar" class="botao pequeno">Copiar</button></div>
+        <p class="dica">ou digite o código <b id="codigo-sala"></b> na tela inicial.</p>
+      </div>
+    </section>
+  </aside>
+</main>
+
+<!-- Tela 3: arena -->
+<main id="tela-arena" class="tela" hidden>
+  <div class="arena-wrap">
+    <div id="arena" class="arena">
+      <div class="placa placa-oponente" id="placa-op">
+        <div class="placa-nome"><span id="nome-op"></span><span class="nivel">Nv50</span></div>
+        <div class="hp"><span>HP</span><div class="barra"><div id="barra-op"></div></div></div>
+      </div>
+      <div class="plataforma plat-op"></div>
+      <img id="sprite-op" class="sprite sprite-op" alt="">
+
+      <div class="plataforma plat-eu"></div>
+      <img id="sprite-eu" class="sprite sprite-eu" alt="">
+      <div class="placa placa-eu" id="placa-eu">
+        <div class="placa-nome"><span id="nome-eu"></span><span class="nivel">Nv50</span></div>
+        <div class="hp"><span>HP</span><div class="barra"><div id="barra-eu"></div></div></div>
+        <div class="hp-num" id="hp-num-eu"></div>
+      </div>
+    </div>
+    <div id="caixa-texto" class="caixa-texto"></div>
+  </div>
+
+  <aside class="painel-ia cartao">
+    <h2>Previsão da IA</h2>
+    <div id="previsao"></div>
+    <div id="resultado" hidden></div>
+    <div class="acoes" id="acoes" hidden>
+      <button id="btn-revanche" class="botao principal">Nova batalha</button>
+    </div>
+    <div id="explicacao"></div>
+  </aside>
+</main>
+
+<script src="/static/sprites.js"></script>
+<script src="/static/jogo.js"></script>
+</body>
+</html>

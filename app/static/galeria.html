@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Galeria de sprites</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/estilo.css">
+<style>
+  .controles { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 14px; }
+  .resumo { color: var(--suave); font-size: 13px; }
+  .galeria { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+  .item { background: var(--cartao); border: 3px solid var(--borda); border-radius: 10px; overflow: hidden; }
+  .item.alerta { border-color: var(--amarelo); }
+  .item .arena { border-bottom: 3px solid #0b0d14; }
+  .legenda { padding: 8px 10px; font-size: 12px; display: flex; flex-direction: column; gap: 4px; }
+  .legenda b { text-transform: capitalize; }
+  .tag { display: inline-block; font-size: 11px; padding: 2px 6px; border-radius: 4px; margin-right: 4px; background: #151927; color: var(--suave); }
+  .tag.aviso { background: #5a4a10; color: #ffe08a; }
+  .tag.ruim { background: #5a2020; color: #ffb0a8; }
+</style>
+</head>
+<body>
+<header class="topo"><h1>GALERIA <span>DE SPRITES</span></h1><a href="/" style="color:var(--suave)">voltar ao jogo</a></header>
+<main class="tela" style="max-width:1400px">
+  <p class="resumo">Cada Pokémon aparece nas duas posições da arena, com o mesmo tamanho do jogo: de frente (oponente) e de
+    costas (seu). Bordas amarelas indicam que foi usada uma imagem alternativa (sem animação, costas espelhadas ou arte oficial).</p>
+  <div class="controles">
+    <select id="geracao"></select>
+    <input id="busca" placeholder="Buscar...">
+    <label style="flex-direction:row;align-items:center"><input type="checkbox" id="so-alertas"> só os com imagem alternativa</label>
+    <span id="resumo" class="resumo"></span>
+  </div>
+  <div id="galeria" class="galeria"></div>
+</main>
+<script src="/static/sprites.js"></script>
+<script>
+const $ = (id) => document.getElementById(id);
+const bonito = (n) => n.replace(/-/g, " ");
+let LISTA = [];
+const estado = {};   // id -> {op: fonte, eu: fonte}
+
+function descreverFonte(f, costas) {
+  if (!f) return '<span class="tag">carregando...</span>';
+  if (f.tipo === "arte") return '<span class="tag ruim">arte oficial (sem sprite)</span>';
+  const partes = [];
+  if (f.tipo === "png") partes.push('<span class="tag aviso">sem animação</span>');
+  if (costas && f.espelhar) partes.push('<span class="tag aviso">sem costas: frente espelhada</span>');
+  return partes.join("") || '<span class="tag">animado ✔</span>';
+}
+
+function atualizarCartao(id) {
+  const e = estado[id], el = document.querySelector(`[data-id="${id}"]`);
+  if (!el) return;
+  const alerta = [e.op, e.eu].some((f) => f && (f.tipo !== "gif" || f.espelhar));
+  el.classList.toggle("alerta", alerta);
+  el.querySelector(".fonte-op").innerHTML = "frente: " + descreverFonte(e.op, false);
+  el.querySelector(".fonte-eu").innerHTML = "costas: " + descreverFonte(e.eu, true);
+  if ($("so-alertas").checked && e.op && e.eu && !alerta) el.hidden = true;
+  resumir();
+}
+
+function resumir() {
+  const vis = filtrados(), carregados = vis.filter((p) => estado[p.id]?.op && estado[p.id]?.eu);
+  const com = carregados.filter((p) => [estado[p.id].op, estado[p.id].eu].some((f) => f.tipo !== "gif" || f.espelhar));
+  $("resumo").textContent = `${vis.length} Pokémon · ${carregados.length} carregados · ${com.length} com imagem alternativa`;
+}
+
+function filtrados() {
+  const g = $("geracao").value, b = $("busca").value.trim().toLowerCase().replace(/\s+/g, "-");
+  return LISTA.filter((p) => (!g || p.geracao === +g) && (!b || p.nome.includes(b)));
+}
+
+function desenhar() {
+  const gal = $("galeria"); gal.innerHTML = "";
+  for (const p of filtrados()) {
+    estado[p.id] = estado[p.id] || {};
+    const item = document.createElement("div");
+    item.className = "item"; item.dataset.id = p.id;
+    item.innerHTML = `<div class="arena">
+        <div class="plataforma plat-op"></div><img class="sprite sprite-op" style="height:0">
+        <div class="plataforma plat-eu"></div><img class="sprite sprite-eu" style="height:0">
+      </div>
+      <div class="legenda"><div><b>${bonito(p.nome)}</b> · id ${p.id} · geração ${p.geracao}</div>
+        <div class="fonte-op"></div><div class="fonte-eu"></div></div>`;
+    gal.append(item);
+    const arena = item.querySelector(".arena");
+    for (const [lado, costas] of [["op", false], ["eu", true]]) {
+      colocarSprite(item.querySelector(".sprite-" + lado), p.id, {
+        costas, aoCarregar: (img, fonte) => { ajustarSprite(img, arena, lado); estado[p.id][lado] = fonte; atualizarCartao(p.id); },
+      });
+    }
+    atualizarCartao(p.id);
+  }
+}
+
+(async () => {
+  LISTA = await (await fetch("/api/pokemon")).json();
+  $("geracao").add(new Option("Todas as gerações (lento)", ""));
+  for (let g = 1; g <= 9; g++) $("geracao").add(new Option(`Geração ${g}`, g));
+  $("geracao").value = "9";
+  $("geracao").onchange = desenhar;
+  $("busca").oninput = desenhar;
+  $("so-alertas").onchange = desenhar;
+  desenhar();
+})();
+</script>
+</body>
+</html>
