@@ -145,6 +145,14 @@ input, select {
 .vencedor { font-family: var(--pixel); font-size: 13px; text-align: center; line-height: 1.6; }
 .acoes .botao { width: 100%; }
 
+/* ---------- a batalha estava nos dados? ---------- */
+.historico { font-size: 13px; line-height: 1.5; padding: 10px; border-radius: 8px; border: 2px solid var(--borda); }
+.historico > b:first-child { display: block; margin-bottom: 4px; }
+.historico .dica { display: block; margin-top: 6px; }
+.historico.treino { background: #2a2540; border-color: #6c5bb3; }
+.historico.teste { background: #1f3340; border-color: #3d7dca; }
+.historico.inedita { background: #1d2234; }
+
 /* ---------- explicação da IA (conceitos do SVM) ---------- */
 #explicacao { border-top: 2px solid var(--borda); padding-top: 10px; }
 #explicacao .explica-titulo { font-family: var(--pixel); font-size: 10px; color: var(--destaque); line-height: 1.7; margin-bottom: 6px; }

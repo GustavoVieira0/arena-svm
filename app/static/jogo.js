@@ -199,6 +199,7 @@ async function animarBatalha(b) {
     <div>Pelo simulador, <b style="text-transform:capitalize">${bonito(favSim.nome)}</b> vence
       <b>${Math.round(pctFav * 100)}%</b> de ${sim.n} batalhas.</div>`;
 
+  mostrarHistorico(b);
   mostrarExplicacao(b);
 
   await falar(`${estado.jogadores[dele].nome} enviou ${bonito(b[dele].nome)}!`, 700);
@@ -254,6 +255,34 @@ async function animarBatalha(b) {
   $("resultado").hidden = false; $("acoes").hidden = espectador;
   if (window.matchMedia("(max-width: 900px)").matches)       // celular: mostra o resultado, que fica abaixo da arena
     $("resultado").scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+// ---------- esta batalha estava nos dados? (treino, teste ou inédita) ----------
+function mostrarHistorico(b) {
+  const h = b.historico;
+  if (!h) { $("historico").innerHTML = ""; return; }
+  const nA = bonito(b.a.nome), nB = bonito(b.b.nome);
+  if (h.situacao === "inedita") {
+    $("historico").innerHTML = `<div class="historico inedita"><b>🆕 Batalha inédita</b>
+      Este confronto não estava nos dados. A IA nunca viu estes dois se enfrentando: está <b>generalizando</b>
+      a partir de situações parecidas.</div>`;
+    return;
+  }
+  const fav = h.favorito === "a" ? nA : nB;
+  const placar = `${nA} venceu <b>${h.vitorias_a} de ${h.n}</b> simulações (favorito: <b>${fav}</b>)`;
+  if (h.situacao === "treino") {
+    $("historico").innerHTML = `<div class="historico treino"><b>📚 Esta batalha estava no treino</b>
+      Nos dados de treino, ${placar}.<br>
+      ${h.ia_concorda
+        ? "A IA <b>concorda</b> com o que viu no treino."
+        : `A IA <b>discorda</b> do próprio treino: mesmo tendo visto esta batalha, ela aposta em ${b.svm.favorito === "a" ? nA : nB}.`}
+      <span class="dica">O SVM não decora resultados: ele aprende regras gerais e aceita errar alguns exemplos do treino
+      (margem suave), para não se ajustar demais a casos isolados.</span></div>`;
+  } else {
+    $("historico").innerHTML = `<div class="historico teste"><b>🧪 Esta batalha estava no conjunto de ${h.situacao === "teste" ? "teste" : "dados extras"}</b>
+      Ela existe nos dados (${placar}), mas <b>não foi usada no treino</b>: a IA nunca a viu.
+      ${h.ia_concorda ? "Mesmo assim, a IA acertou o favorito." : "A IA apostou diferente do resultado registrado."}</div>`;
+  }
 }
 
 // ---------- explicação da previsão com os conceitos do SVM ----------

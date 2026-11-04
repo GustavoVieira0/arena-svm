@@ -36,8 +36,27 @@ info = pk.set_index("pokeapi_id")
 extrator = Extrator(pk)
 modelo = joblib.load(RAIZ / "modelos/svm_duelo_v2.joblib")
 COLUNAS = json.load(open(RAIZ / "modelos/svm_duelo_v2.json"))["features"]
-explicador = Explicador(modelo, COLUNAS, pd.read_csv(RAIZ / "data/processed/batalhas.csv"),
-                        info["name"])
+batalhas_base = pd.read_csv(RAIZ / "data/processed/batalhas.csv")
+explicador = Explicador(modelo, COLUNAS, batalhas_base, info["name"])
+
+# Confrontos que existem na base: (a_id, b_id) -> grupo, vitórias de A e nº de simulações.
+# Guarda as duas ordens (A×B e B×A), invertendo as vitórias, para achar o confronto de qualquer lado.
+N_SIM_BASE = 21
+HISTORICO = {}
+for r in batalhas_base.itertuples():
+    HISTORICO.setdefault((r.a_id, r.b_id), (r.grupo, r.vitorias_a, False))
+    HISTORICO.setdefault((r.b_id, r.a_id), (r.grupo, N_SIM_BASE - r.vitorias_a, True))
+
+
+def historico(a_id, b_id, favorito_svm):
+    """Diz se o confronto estava na base (treino, teste ou misto) e o que aconteceu lá."""
+    achado = HISTORICO.get((a_id, b_id))
+    if achado is None:
+        return {"situacao": "inedita"}
+    grupo, vit_a, invertido = achado
+    fav = "a" if vit_a > N_SIM_BASE / 2 else "b"
+    return {"situacao": grupo, "vitorias_a": int(vit_a), "n": N_SIM_BASE, "favorito": fav,
+            "invertido": invertido, "ia_concorda": fav == favorito_svm}
 
 app = Flask(__name__, static_folder=str(Path(__file__).parent / "static"), static_url_path="/static")
 salas = {}
@@ -106,6 +125,7 @@ def rodar_batalha(sala):
                 # confiança apresentada: transformação logística do score (não calibrada)
                 "confianca": round(1 / (1 + math.exp(-abs(score) * 1.5)), 2),
                 "explicacao": explicador.explicar(x)},
+        "historico": historico(a_id, b_id, "a" if score > 0 else "b"),
         "simulador": {"vitorias_a": vitorias_a, "n": N_SIMULACOES,
                       "favorito": "a" if vitorias_a > N_SIMULACOES / 2 else "b"},
         "eventos": eventos,
