@@ -105,6 +105,9 @@ sabe quais golpes cada Pokémon aprende (ex.: erra Pikachu × Gyarados, que o Pi
 features de golpes é o experimento E2.
 
 ## Arena: jogo para dois jogadores
+**Jogue online: https://arena-svm.onrender.com** · crie uma sala e mande o link para outra pessoa, de qualquer lugar.
+A hospedagem é gratuita (Render): depois de um tempo sem acessos, o primeiro carregamento pode levar cerca de 1 minuto.
+
 Aplicação web em `app/`: cada jogador escolhe (ou sorteia na roleta) um Pokémon de qualquer geração, a IA mostra quem
 ela acha que vence, e a batalha é animada com os sprites dos jogos.
 
@@ -157,6 +160,7 @@ dados do PokéAPI.
 | Ficha de experimentos | [PDF](docs/entregas/Ficha_de_Experimentos.pdf) |
 | Folder | [PDF](docs/entregas/folder/Folder_Arena_SVM.pdf) |
 | Carrossel do Instagram | [cards e legenda](docs/entregas/instagram) |
+| Jogo online | https://arena-svm.onrender.com |
 | Vídeo demonstrativo | [roteiro](docs/entregas/video/roteiro_video.md) · link do vídeo: a publicar |
 | Referências e artigos | [referências](docs/referencias.md) · [artigos](docs/artigos) |
 

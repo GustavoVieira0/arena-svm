@@ -5,6 +5,7 @@ RAIZ = Path(__file__).resolve().parents[1]   # pasta docs/
 IMG = "../../img"   # caminho relativo às pastas folder/ e instagram/
 SPR = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon"
 REPO = "github.com/GustavoVieira0/arena-svm"
+JOGO = "arena-svm.onrender.com"
 FONTES = ('<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;600;700;800'
           '&display=swap" rel="stylesheet">')
 CORES = """
@@ -134,9 +135,10 @@ CARDS = [
     <p class="suave" style="font-size:33px">Onde ela erra? Quando a <b>sorte</b> decide: batalhas equilibradas, golpes críticos e
        azarões com o golpe certo.</p>
     <div class="caixa" style="display:flex;gap:34px;align-items:center;margin-top:8px">
-      <img src="{IMG}/qr_github.png" style="width:300px;height:300px;border-radius:14px">
-      <div><div class="px" style="font-size:26px;line-height:1.7;color:var(--amarelo)">Jogue e veja a IA explicar cada aposta</div>
-        <p style="font-size:27px;margin:16px 0 0">{REPO}</p></div>
+      <img src="{IMG}/qr_jogo.png" style="width:300px;height:300px;border-radius:14px">
+      <div><div class="px" style="font-size:26px;line-height:1.7;color:var(--amarelo)">Jogue agora e desafie um amigo</div>
+        <p style="font-size:30px;margin:16px 0 6px;font-weight:700">{JOGO}</p>
+        <p class="suave" style="font-size:22px;margin:0">Código: {REPO}</p></div>
     </div>
     <p class="suave" style="font-size:19px;margin-top:22px">{MARCA}</p>''',
 ]
@@ -176,9 +178,10 @@ def folder():
        Prof. Ronaldo Cesar Dametto · 2026</p>
     <h2 style="margin-top:6mm">Quer testar?</h2>
     <div class="caixa" style="display:flex;gap:5mm;align-items:center">
-      <img src="{IMG}/qr_github.png" style="width:42mm;height:42mm">
-      <div><p><b>Código, dados, experimentos e o jogo</b> estão no repositório do projeto.</p>
-        <p style="font-size:9pt;margin:0"><b>{REPO}</b></p></div>
+      <img src="{IMG}/qr_jogo.png" style="width:42mm;height:42mm">
+      <div><p><b>Aponte a câmera e jogue</b>: desafie um amigo e veja a IA explicar cada aposta.</p>
+        <p style="font-size:10pt;margin:0 0 2mm"><b>{JOGO}</b></p>
+        <p class="pq" style="margin:0">Código, dados e experimentos: {REPO}</p></div>
     </div>
     <h2 style="margin-top:6mm">Vale lembrar</h2>
     <p class="pq" style="font-size:9pt">As batalhas vêm de um simulador próprio, mais simples que o jogo real (sem habilidades, itens
@@ -193,7 +196,8 @@ def folder():
         <img class="spr" src="{SPR}/6.png" style="width:52mm"><span class="px" style="font-size:16pt;color:var(--vermelho);padding-bottom:20mm">VS</span>
         <img class="spr" src="{SPR}/9.png" style="width:52mm"></div>
     </div>
-    <p style="font-size:11pt;color:var(--suave)">Ensinamos um computador a apostar no favorito, e ele ainda explica por que escolheu.</p>
+    <p style="font-size:11pt;color:var(--suave)">Ensinamos um computador a apostar no favorito, e ele ainda explica por que escolheu.
+      <br><span style="color:var(--amarelo)">Jogue em {JOGO}</span></p>
   </div>
 </div>'''
     dentro = f'''<div class="folha">

@@ -2,7 +2,7 @@
 
 | Entrega | Arquivo | Situação |
 |---|---|---|
-| Protótipo web | [`app/`](../../app) · iniciar com `jogar.bat` | Pronto |
+| Protótipo web | **https://arena-svm.onrender.com** · código em [`app/`](../../app) · local: `jogar.bat` | Pronto (online) |
 | Repositório | [README principal](../../README.md) | Pronto |
 | Resumo expandido (2 páginas) | [`../jornada/Resumo_Jornada_2026_Arena_SVM.pdf`](../jornada/Resumo_Jornada_2026_Arena_SVM.pdf) | Falta o e-mail do orientador |
 | Folder (1 página com dobra) | [`folder/Folder_Arena_SVM.pdf`](folder/Folder_Arena_SVM.pdf) | Pronto para imprimir |
