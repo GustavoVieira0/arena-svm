@@ -1,0 +1,43 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet"><style>
+:root { --fundo:#1b1f2e; --cartao:#262b3f; --borda:#3a4160; --texto:#eef1f8; --suave:#9aa3bf; --amarelo:#ffcb05;
+        --azul:#3d7dca; --verde:#3fbf5f; --vermelho:#e2453c; --pixel:"Press Start 2P",monospace; }
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:Inter,system-ui,sans-serif; }
+.px { font-family:var(--pixel); }
+img.spr { image-rendering:pixelated; }
+
+body { width:1080px; height:1350px; background:var(--fundo); color:var(--texto); overflow:hidden; }
+.card { width:1080px; height:1350px; padding:80px 72px 70px; display:flex; flex-direction:column; position:relative;
+        background:linear-gradient(180deg,#1b1f2e 0%,#232a44 100%); }
+.topo { display:flex; justify-content:space-between; align-items:center; font-family:var(--pixel); font-size:22px; color:var(--suave); }
+.topo b { color:var(--amarelo); }
+h1 { font-family:var(--pixel); font-size:58px; line-height:1.6; margin:0 0 40px; }
+h1 em { color:var(--amarelo); font-style:normal; }
+h2 { font-family:var(--pixel); font-size:40px; line-height:1.6; margin:50px 0 34px; color:var(--amarelo); }
+p { font-size:38px; line-height:1.45; margin-bottom:26px; }
+p b, li b { color:var(--amarelo); }
+.suave { color:var(--suave); }
+.caixa { background:var(--cartao); border:4px solid var(--borda); border-radius:22px; padding:34px; }
+.num { font-family:var(--pixel); font-size:54px; color:var(--amarelo); display:block; margin-bottom:14px; }
+.grade { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+.grade .caixa { font-size:30px; line-height:1.4; }
+.miolo { flex:1; display:flex; flex-direction:column; justify-content:center; }
+.miolo > h2:first-child, .miolo > h1:first-child { margin-top:0; }
+.rodape { display:flex; justify-content:space-between; align-items:flex-end; font-size:22px; color:var(--suave); }
+.rodape .px { font-size:18px; color:var(--amarelo); }
+.vs { display:flex; align-items:flex-end; justify-content:center; gap:10px; margin:10px 0 0; }
+.vs img { width:430px; height:430px; }
+.vs span { font-family:var(--pixel); font-size:54px; color:var(--vermelho); padding-bottom:150px; }
+</style></head>
+<body><div class="card"><div class="topo"><span>ARENA <b>SVM</b></span><span>3/6</span></div><div class="miolo"><h2>Os dados</h2>
+    <p>Usamos os dados oficiais dos jogos (PokéAPI) e criamos um <b>simulador de batalhas</b> com a fórmula de dano
+       do jogo e os golpes que cada Pokémon aprende.</p>
+    <div class="grade">
+      <div class="caixa"><span class="num">40 mil</span>confrontos diferentes</div>
+      <div class="caixa"><span class="num">×21</span>batalhas cada um, porque existe <b>sorte</b></div>
+    </div>
+    <p style="margin-top:30px">A IA treina com as <b>gerações 1 a 6</b> e é testada com as <b>gerações 7 a 9</b>:
+       Pokémon que ela <b>nunca viu</b>.</p>
+    <img src="../../img/arena_batalha.png" style="width:400px;align-self:center;border-radius:16px;border:4px solid var(--borda)"></div>
+<div class="rodape"><span>Inteligência Artificial II · Ciência da Computação · FIB</span><span class="px">arraste →</span></div>
+</div></body></html>

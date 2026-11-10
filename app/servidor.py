@@ -29,6 +29,12 @@ from features import Extrator  # noqa: E402
 from simulador import batalha, candidatos, simular_confronto  # noqa: E402
 
 PORTA = int(os.environ.get("PORTA", 5000))
+# Endereço público, quando o jogo está hospedado na internet.
+# Ordem: variável definida manualmente, endereço do Render e endereço do Hugging Face Spaces.
+URL_PUBLICA = (os.environ.get("URL_PUBLICA") or os.environ.get("RENDER_EXTERNAL_URL")
+               or (f"https://{os.environ['SPACE_HOST']}" if os.environ.get("SPACE_HOST") else None))
+SALA_EXPIRA_S = 2 * 60 * 60        # salas sem atividade por 2 horas são removidas
+MAX_SALAS = 500
 N_SIMULACOES = 201
 
 pk = pd.read_csv(RAIZ / "data/processed/pokemon.csv")
@@ -86,6 +92,18 @@ def pokemon_publico(pid):
 LISTA = [pokemon_publico(pid) for pid in info.index]
 
 
+def endereco_base():
+    """Endereço que o outro jogador deve abrir: o público (online) ou o IP da rede local."""
+    return URL_PUBLICA or f"http://{ip_local()}:{PORTA}"
+
+
+def limpar_salas():
+    """Remove salas sem atividade (chamar com a trava). Evita acúmulo quando o jogo está público."""
+    agora = time.time()
+    for c in [c for c, sl in salas.items() if agora - sl["ativa"] > SALA_EXPIRA_S]:
+        del salas[c]
+
+
 def novo_codigo():
     while True:
         c = "".join(random.choices(string.ascii_uppercase.replace("O", "").replace("I", "") + "23456789", k=4))
@@ -104,7 +122,7 @@ def estado_sala(sala, token):
                            "pokemon": pokemon_publico(j["pokemon"]) if (revelar and j["pokemon"]) else None}
     return {"codigo": sala["codigo"], "eu": eu, "jogadores": jogadores, "batalha": sala["batalha"],
             "espectadores": len(sala["espectadores"]), "versao": sala["versao"],
-            "link": f"http://{ip_local()}:{PORTA}/?sala={sala['codigo']}"}
+            "link": f"{endereco_base()}/?sala={sala['codigo']}", "online": URL_PUBLICA is not None}
 
 
 def rodar_batalha(sala):
@@ -147,9 +165,12 @@ def lista_pokemon():
 def criar_sala():
     nome = (request.get_json(silent=True) or {}).get("nome") or "Jogador 1"
     with trava:
+        limpar_salas()
+        if len(salas) >= MAX_SALAS:
+            return jsonify({"erro": "Muitas salas abertas no momento. Tente de novo em alguns minutos."}), 503
         codigo = novo_codigo()
         token = uuid.uuid4().hex
-        salas[codigo] = {"codigo": codigo, "criada": time.time(), "versao": 1, "batalha": None, "espectadores": set(),
+        salas[codigo] = {"codigo": codigo, "criada": time.time(), "ativa": time.time(), "versao": 1, "batalha": None, "espectadores": set(),
                          "jogadores": {"a": {"nome": nome[:20], "token": token, "pokemon": None, "pronto": False}}}
         return jsonify({"codigo": codigo, "token": token, "estado": estado_sala(salas[codigo], token)})
 
@@ -158,6 +179,7 @@ def pegar_sala(codigo):
     sala = salas.get(codigo.upper())
     if sala is None:
         return None, (jsonify({"erro": "Sala não encontrada. Confira o código."}), 404)
+    sala["ativa"] = time.time()
     return sala, None
 
 

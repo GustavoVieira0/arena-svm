@@ -129,7 +129,11 @@ def _tabela_golpes():
 
     # métodos válidos: nível, ovo, tutor, TM/TR, ovo com Light Ball, troca de forma, Zygarde Cube
     # (exclui Pikachu surfista do Stadium, golpes "sombrios" de Colosseum/XD e o método "train")
-    pm = pd.read_csv(RAW / "pokemon_moves.csv", usecols=["pokemon_id", "move_id", "pokemon_move_method_id"])
+    # na versão publicada, o arquivo vai compactado (.csv.gz) para respeitar o limite de tamanho da hospedagem
+    arq_golpes = RAW / "pokemon_moves.csv"
+    if not arq_golpes.exists():
+        arq_golpes = RAW / "pokemon_moves.csv.gz"
+    pm = pd.read_csv(arq_golpes, usecols=["pokemon_id", "move_id", "pokemon_move_method_id"])
     pm = pm[pm.pokemon_move_method_id.isin([1, 2, 3, 4, 6, 10, 11]) & pm.move_id.isin(golpes)]
     pm = pm[["pokemon_id", "move_id"]].drop_duplicates()
     por_pokemon = {pid: tuple(golpes[m] for m in g.move_id) for pid, g in pm.groupby("pokemon_id")}

@@ -98,6 +98,9 @@ function aplicarEstado(novo) {
     (estado.espectadores ? `<div class="dica">${estado.espectadores} pessoa(s) assistindo</div>` : "");
   $("convite").hidden = !!outro;
   $("link-sala").textContent = estado.link;
+  $("convite-texto").textContent = estado.online
+    ? "Para o outro jogador entrar, de qualquer lugar, envie o link:"
+    : "Para o outro jogador entrar (mesma rede Wi-Fi), envie o link:";
   $("codigo-sala").textContent = estado.codigo;
 }
 

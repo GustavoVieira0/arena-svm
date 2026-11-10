@@ -1,0 +1,118 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet"><style>
+:root { --fundo:#1b1f2e; --cartao:#262b3f; --borda:#3a4160; --texto:#eef1f8; --suave:#9aa3bf; --amarelo:#ffcb05;
+        --azul:#3d7dca; --verde:#3fbf5f; --vermelho:#e2453c; --pixel:"Press Start 2P",monospace; }
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:Inter,system-ui,sans-serif; }
+.px { font-family:var(--pixel); }
+img.spr { image-rendering:pixelated; }
+
+@page { size:A4 landscape; margin:0; }
+body { width:297mm; color:#1b1f2e; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+.folha { width:297mm; height:210mm; display:flex; page-break-after:always; overflow:hidden; }
+.painel { width:148.5mm; height:210mm; padding:13mm 12mm; display:flex; flex-direction:column; }
+.escuro { background:linear-gradient(180deg,#1b1f2e,#232a44); color:var(--texto); }
+.claro { background:#fbfaf3; }
+.dobra { border-left:.3mm dashed #c9c9c9; }
+h1 { font-family:var(--pixel); font-size:19pt; line-height:1.6; }
+h1 em { color:var(--amarelo); font-style:normal; }
+h2 { font-family:var(--pixel); font-size:10.5pt; line-height:1.6; color:#2d5fa3; margin:0 0 3mm; }
+.escuro h2 { color:var(--amarelo); }
+p { font-size:10.5pt; line-height:1.5; margin-bottom:3mm; }
+.pq { font-size:8.5pt; color:#5b6480; }
+.escuro .pq { color:var(--suave); }
+.caixa { background:#fff; border:.5mm solid #d8dbe6; border-radius:3mm; padding:4mm; }
+.escuro .caixa { background:var(--cartao); border-color:var(--borda); }
+.num { font-family:var(--pixel); font-size:22pt; color:#2d5fa3; }
+.passos { display:grid; grid-template-columns:1fr 1fr 1fr; gap:3mm; margin:2mm 0 4mm; }
+.passos .caixa { font-size:8.8pt; line-height:1.4; padding:3mm; }
+.passos b { display:block; font-family:var(--pixel); font-size:7.5pt; color:#2d5fa3; margin-bottom:1.5mm; line-height:1.5; }
+</style></head>
+<body><div class="folha">
+  <div class="painel claro">
+    <h2>Quem fez</h2>
+    <p>Alceu Ferreira dos Santos Neto<br>Anthony Gabriel Schirato Lourenço<br>Gustavo de Carvalho Vieira<br>
+       Luan Carlos de Souza Ferreira<br>Lucas Miguel Moreno Rios</p>
+    <p class="pq">Disciplina de Inteligência Artificial II · Ciência da Computação<br>Faculdades Integradas de Bauru (FIB) ·
+       Prof. Ronaldo Cesar Dametto · 2026</p>
+    <h2 style="margin-top:6mm">Quer testar?</h2>
+    <div class="caixa" style="display:flex;gap:5mm;align-items:center">
+      <img src="../../img/qr_github.png" style="width:42mm;height:42mm">
+      <div><p><b>Código, dados, experimentos e o jogo</b> estão no repositório do projeto.</p>
+        <p style="font-size:9pt;margin:0"><b>github.com/GustavoVieira0/arena-svm</b></p></div>
+    </div>
+    <h2 style="margin-top:6mm">Vale lembrar</h2>
+    <p class="pq" style="font-size:9pt">As batalhas vêm de um simulador próprio, mais simples que o jogo real (sem habilidades, itens
+       ou estratégia). A IA aprende as regras desse simulador: ela não serve para prever partidas competitivas.</p>
+    <p class="pq" style="margin-top:auto">Pokémon é marca registrada da Nintendo, Game Freak e Creatures. Projeto acadêmico, sem fins comerciais. Dados: PokéAPI.</p>
+  </div>
+  <div class="painel escuro dobra" style="justify-content:space-between">
+    <div class="px" style="font-size:9pt;color:var(--suave)">ARENA <span style="color:var(--amarelo)">SVM</span></div>
+    <div>
+      <h1>Uma IA consegue prever <em>quem vence</em> uma batalha Pokémon?</h1>
+      <div style="display:flex;justify-content:center;align-items:flex-end;gap:2mm;margin-top:8mm">
+        <img class="spr" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/6.png" style="width:52mm"><span class="px" style="font-size:16pt;color:var(--vermelho);padding-bottom:20mm">VS</span>
+        <img class="spr" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/9.png" style="width:52mm"></div>
+    </div>
+    <p style="font-size:11pt;color:var(--suave)">Ensinamos um computador a apostar no favorito, e ele ainda explica por que escolheu.</p>
+  </div>
+</div><div class="folha">
+  <div class="painel claro">
+    <h2>O problema</h2>
+    <p>Existem <b>1.242 Pokémon</b> e mais de <b>770 mil confrontos</b> possíveis. Antes da batalha, como saber quem leva
+       vantagem? Regras simples ajudam pouco: o mais rápido vence só <b>68%</b> das vezes, e o mais forte, <b>81%</b>.</p>
+    <h2 style="margin-top:3mm">Como a IA aprende</h2>
+    <div class="passos">
+      <div class="caixa"><b>1. Exemplos</b>Um simulador com a fórmula de dano do jogo gerou 40 mil confrontos, cada um repetido 21 vezes.</div>
+      <div class="caixa"><b>2. Treino</b>A IA estuda as batalhas dos Pokémon das gerações 1 a 6 e descobre padrões.</div>
+      <div class="caixa"><b>3. Prova</b>Ela é testada com Pokémon das gerações 7 a 9, que nunca viu.</div>
+    </div>
+    <h2>A ideia do SVM</h2>
+    <div style="display:flex;gap:5mm;align-items:center">
+      <div class="caixa" style="width:62mm;flex-shrink:0;padding:2mm 3mm"><svg viewBox="0 0 520 330" width="100%" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="215,0 305,0 345,330 255,330" fill="#ffcb05" opacity=".22"/>
+      <line x1="215" y1="0" x2="255" y2="330" stroke="#ffcb05" stroke-width="3" stroke-dasharray="10 8"/>
+      <line x1="305" y1="0" x2="345" y2="330" stroke="#ffcb05" stroke-width="3" stroke-dasharray="10 8"/>
+      <line x1="260" y1="0" x2="300" y2="330" stroke="#ffcb05" stroke-width="6"/><circle cx="70" cy="70" r="11" fill="#e07a5f"/><circle cx="120" cy="130" r="11" fill="#e07a5f"/><circle cx="60" cy="180" r="11" fill="#e07a5f"/><circle cx="150" cy="60" r="11" fill="#e07a5f"/><circle cx="110" cy="230" r="11" fill="#e07a5f"/><circle cx="175" cy="150" r="11" fill="#e07a5f"/><circle cx="175" cy="150" r="18" fill="none" stroke="#1b1f2e" stroke-width="3"/><circle cx="50" cy="270" r="11" fill="#e07a5f"/><circle cx="190" cy="250" r="11" fill="#e07a5f"/><circle cx="190" cy="250" r="18" fill="none" stroke="#1b1f2e" stroke-width="3"/><circle cx="420" cy="60" r="11" fill="#6c8fd8"/><circle cx="360" cy="120" r="11" fill="#6c8fd8"/><circle cx="360" cy="120" r="18" fill="none" stroke="#1b1f2e" stroke-width="3"/><circle cx="450" cy="150" r="11" fill="#6c8fd8"/><circle cx="390" cy="210" r="11" fill="#6c8fd8"/><circle cx="470" cy="250" r="11" fill="#6c8fd8"/><circle cx="330" cy="265" r="11" fill="#6c8fd8"/><circle cx="330" cy="265" r="18" fill="none" stroke="#1b1f2e" stroke-width="3"/><circle cx="440" cy="300" r="11" fill="#6c8fd8"/><circle cx="345" cy="45" r="11" fill="#6c8fd8"/></svg></div>
+      <p style="font-size:9.8pt;margin:0">Cada batalha vira um ponto. A técnica, chamada <b>Máquina de Vetores de Suporte (SVM)</b>,
+        traça a <b>rua mais larga possível</b> separando as batalhas que um lado vence das que o outro vence. Uma batalha nova
+        é classificada pelo lado da rua em que cai. Os pontos na beira da rua (circulados) são os únicos que definem a decisão.</p>
+    </div>
+    <p class="pq" style="margin-top:auto">A IA recebe só o que se sabe antes da luta: atributos, tipos e golpes de cada Pokémon.</p>
+  </div>
+  <div class="painel claro dobra">
+    <h2>O resultado</h2>
+    <div style="display:flex;gap:5mm;align-items:center;margin-bottom:4mm">
+      <div class="num">92,6%</div>
+      <p style="margin:0">de acerto no favorito, em batalhas entre Pokémon que a IA <b>nunca tinha visto</b>.</p>
+    </div>
+    <div style="margin-bottom:2mm"><div style="margin-bottom:6.84pt">
+          <div style="font-size:9.5pt;font-weight:600;color:#1b1f2e;margin-bottom:6pt">Vence o mais rápido</div>
+          <div style="background:#e4e7f0;border-radius:2mm;height:18pt;position:relative">
+            <div style="width:67.8%;height:100%;background:#7c86a8;border-radius:10pt;display:flex;align-items:center;
+                 justify-content:flex-end;padding-right:14pt;font-family:var(--pixel);font-size:7.6000000000000005pt;color:#fff">
+              67,8%</div></div></div><div style="margin-bottom:6.84pt">
+          <div style="font-size:9.5pt;font-weight:600;color:#1b1f2e;margin-bottom:6pt">Vence o mais forte</div>
+          <div style="background:#e4e7f0;border-radius:2mm;height:18pt;position:relative">
+            <div style="width:80.6%;height:100%;background:#7c86a8;border-radius:10pt;display:flex;align-items:center;
+                 justify-content:flex-end;padding-right:14pt;font-family:var(--pixel);font-size:7.6000000000000005pt;color:#fff">
+              80,6%</div></div></div><div style="margin-bottom:6.84pt">
+          <div style="font-size:9.5pt;font-weight:600;color:#1b1f2e;margin-bottom:6pt">IA (atributos e tipos)</div>
+          <div style="background:#e4e7f0;border-radius:2mm;height:18pt;position:relative">
+            <div style="width:86.6%;height:100%;background:#3d7dca;border-radius:10pt;display:flex;align-items:center;
+                 justify-content:flex-end;padding-right:14pt;font-family:var(--pixel);font-size:7.6000000000000005pt;color:#fff">
+              86,6%</div></div></div><div style="margin-bottom:6.84pt">
+          <div style="font-size:9.5pt;font-weight:600;color:#1b1f2e;margin-bottom:6pt">IA + golpes de cada Pokémon</div>
+          <div style="background:#e4e7f0;border-radius:2mm;height:18pt;position:relative">
+            <div style="width:92.6%;height:100%;background:#3fbf5f;border-radius:10pt;display:flex;align-items:center;
+                 justify-content:flex-end;padding-right:14pt;font-family:var(--pixel);font-size:7.6000000000000005pt;color:#fff">
+              92,6%</div></div></div></div>
+    <p style="font-size:9.8pt"><b>Descoberta:</b> o que mais melhorou a IA não foi trocar o algoritmo, e sim dar a ela a informação certa:
+       os golpes que cada Pokémon aprende. Ela ainda erra quando a <b>sorte</b> decide a batalha.</p>
+    <h2 style="margin-top:2mm">O protótipo: Arena SVM</h2>
+    <div style="display:flex;gap:4mm;align-items:center">
+      <img src="../../img/arena_batalha.png" style="width:64mm;border-radius:2mm;border:.5mm solid #1b1f2e">
+      <p style="font-size:9.5pt;margin:0">Dois jogadores escolhem seus Pokémon, a IA aposta no favorito e a batalha acontece na tela.
+        Depois, o jogo mostra <b>por que</b> a IA apostou assim: a fronteira, o que mais pesou e as batalhas em que ela se baseou.</p>
+    </div>
+  </div>
+</div></body></html>

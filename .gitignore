@@ -8,3 +8,6 @@ __pycache__/
 
 # PDFs de artigos (direitos das editoras): guardar só localmente
 docs/artigos/pdfs/
+
+# Pacote montado para publicação (gerado por deploy/montar_pacote.py)
+deploy/_pacote/

@@ -3,6 +3,8 @@
 Projeto da disciplina **Inteligência Artificial II** · Ciência da Computação · FIB
 Professor: Ronaldo Cesar Dametto
 
+![Arena SVM: batalha entre Blastoise e Charizard, com a previsão e a explicação da IA](docs/img/arena_resultado.png)
+
 ## Problema
 Em jogos de batalha, os jogadores escolhem personagens sem saber quem tem vantagem no confronto. Este projeto investiga
 se é possível **prever o favorito de uma batalha 1 contra 1** usando apenas as características dos personagens
@@ -133,6 +135,30 @@ Notebook `notebooks/02_experimentos_svm.ipynb` · guia em `docs/guia_checkpoint2
 
 **Modelo final (v2):** SVM RBF, 15 features, **92,6%** de acurácia e ROC-AUC 0,977 no teste, salvo em
 `modelos/svm_duelo_v2.joblib` e usado pela demo `src/batalhar.py`.
+
+## Limitações conhecidas
+- O simulador é mais simples que o jogo: não tem habilidades, itens, golpes de status, trocas nem estratégia. O modelo
+  aprende as regras **do simulador**, e não serve para prever partidas competitivas reais.
+- O modelo erra 7,3% dos favoritos no teste; o erro sobe para 31% em confrontos equilibrados e 13% em duelos de nocaute
+  em 1 golpe. Uma batalha isolada também depende de sorte.
+- As variáveis de golpes usam a mesma fórmula do simulador, e a "confiança" mostrada na arena não é uma probabilidade
+  calibrada.
+- A arena funciona em rede local e precisa de internet para carregar os sprites.
+
+## Tecnologias
+Python 3.12 · scikit-learn (SVM) · pandas · NumPy · Matplotlib · Flask · HTML, CSS e JavaScript (sem frameworks) ·
+dados do PokéAPI.
+
+## Materiais do projeto
+| Material | Link |
+|---|---|
+| Resumo expandido (Jornada Científica) | [PDF](docs/jornada/Resumo_Jornada_2026_Arena_SVM.pdf) |
+| Model Card | [PDF](docs/entregas/Model_Card.pdf) |
+| Ficha de experimentos | [PDF](docs/entregas/Ficha_de_Experimentos.pdf) |
+| Folder | [PDF](docs/entregas/folder/Folder_Arena_SVM.pdf) |
+| Carrossel do Instagram | [cards e legenda](docs/entregas/instagram) |
+| Vídeo demonstrativo | [roteiro](docs/entregas/video/roteiro_video.md) · link do vídeo: a publicar |
+| Referências e artigos | [referências](docs/referencias.md) · [artigos](docs/artigos) |
 
 ## Uso de IA
 O uso de ferramentas de IA está registrado em `docs/diario_ia.md`.
