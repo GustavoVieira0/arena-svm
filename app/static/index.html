@@ -18,12 +18,16 @@
 <!-- Tela 1: início -->
 <main id="tela-inicio" class="tela">
   <section class="cartao inicio">
-    <p class="subtitulo">Escolha seu Pokémon, desafie um amigo e veja se a IA acerta quem vence.</p>
+    <div id="aviso-convite" class="aviso-convite" hidden>
+      <div class="px">Você foi convidado!</div>
+      <p>Digite seu nome e entre na sala <b id="codigo-convite"></b> para batalhar.</p>
+    </div>
+    <p class="subtitulo" id="subtitulo-inicio">Escolha seu Pokémon, desafie um amigo e veja se a IA acerta quem vence.</p>
     <label>Seu nome
       <input id="nome" maxlength="20" placeholder="Ex.: Ash">
     </label>
     <button id="btn-criar" class="botao principal">Criar sala</button>
-    <div class="ou">ou</div>
+    <div class="ou" id="ou-inicio">ou</div>
     <label>Código da sala
       <input id="codigo" maxlength="4" placeholder="Ex.: PK7Q" style="text-transform:uppercase">
     </label>
@@ -65,7 +69,14 @@
       <div id="convite" class="convite">
         <p id="convite-texto">Para o outro jogador entrar (mesma rede Wi-Fi), envie o link:</p>
         <div class="link"><code id="link-sala"></code><button id="btn-copiar" class="botao pequeno">Copiar</button></div>
-        <p class="dica">ou digite o código <b id="codigo-sala"></b> na tela inicial.</p>
+        <div class="convite-qr">
+          <div id="qr-sala" class="qr-sala" title="QR Code da sala"></div>
+          <div class="convite-qr-texto">
+            <p>Ou peça para a pessoa <b>apontar a câmera</b> para este QR Code.</p>
+            <button id="btn-compartilhar" class="botao pequeno">📤 Compartilhar convite</button>
+          </div>
+        </div>
+        <p class="dica">Também dá para digitar o código <b id="codigo-sala"></b> na tela inicial.</p>
       </div>
     </section>
   </aside>
@@ -105,6 +116,7 @@
   </aside>
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
 <script src="/static/sprites.js"></script>
 <script src="/static/jogo.js"></script>
 </body>

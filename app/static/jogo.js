@@ -53,6 +53,9 @@ $("btn-criar").onclick = async () => {
   try { await entrarNaSala(await api("/api/salas", { nome: $("nome").value.trim() })); }
   catch (e) { $("erro-inicio").textContent = e.message; }
 };
+$("nome").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") ($("aviso-convite").hidden ? $("btn-criar") : $("btn-entrar")).click();
+});
 $("btn-entrar").onclick = async () => {
   const codigo = $("codigo").value.trim().toUpperCase();
   if (codigo.length !== 4) { $("erro-inicio").textContent = "Digite o código de 4 letras."; return; }
@@ -98,6 +101,7 @@ function aplicarEstado(novo) {
     (estado.espectadores ? `<div class="dica">${estado.espectadores} pessoa(s) assistindo</div>` : "");
   $("convite").hidden = !!outro;
   $("link-sala").textContent = estado.link;
+  desenharQrSala(estado.link);
   $("convite-texto").textContent = estado.online
     ? "Para o outro jogador entrar, de qualquer lugar, envie o link:"
     : "Para o outro jogador entrar (mesma rede Wi-Fi), envie o link:";
@@ -160,7 +164,33 @@ $("btn-roleta").onclick = async () => {
 $("btn-pronto").onclick = async () => {
   try { aplicarEstado(await api(`/api/salas/${sala}/pronto`, { token })); } catch (e) { alert(e.message); }
 };
-$("btn-copiar").onclick = () => navigator.clipboard?.writeText($("link-sala").textContent);
+$("btn-copiar").onclick = async () => {
+  try { await navigator.clipboard.writeText($("link-sala").textContent); $("btn-copiar").textContent = "Copiado!"; }
+  catch { $("btn-copiar").textContent = "Selecione e copie"; }
+  setTimeout(() => ($("btn-copiar").textContent = "Copiar"), 2000);
+};
+
+// QR Code com o link da sala (biblioteca qrcode-generator, carregada do CDN)
+let qrDesenhado = null;
+function desenharQrSala(link) {
+  if (qrDesenhado === link || typeof qrcode === "undefined") return;
+  const q = qrcode(0, "M"); q.addData(link); q.make();
+  $("qr-sala").innerHTML = q.createSvgTag({ cellSize: 4, margin: 2, scalable: true });
+  qrDesenhado = link;
+}
+
+// No celular, abre o menu de compartilhar do sistema (WhatsApp, Telegram...); no computador, copia o link.
+$("btn-compartilhar").onclick = async () => {
+  const link = $("link-sala").textContent;
+  const texto = "Bora batalhar na Arena SVM? A IA tenta adivinhar quem vence. Entre na minha sala:";
+  if (navigator.share) {
+    try { await navigator.share({ title: "Arena SVM", text: texto, url: link }); } catch {}
+  } else {
+    try { await navigator.clipboard.writeText(`${texto} ${link}`); $("btn-compartilhar").textContent = "Convite copiado!"; }
+    catch { $("btn-compartilhar").textContent = "Copie o link acima"; }
+    setTimeout(() => ($("btn-compartilhar").textContent = "📤 Compartilhar convite"), 2500);
+  }
+};
 $("filtro-geracao").onchange = desenharGrade;
 $("filtro-busca").oninput = desenharGrade;
 
@@ -384,6 +414,13 @@ window.addEventListener("resize", () => {
     if (tk) {                                          // já estava nesta sala (recarregou a página)
       try { await entrarNaSala(await api(`/api/salas/${codigo}/entrar`, { token: tk })); return; } catch {}
     }
+    // chegou por um convite (link ou QR Code): destaca a entrada na sala e esconde "Criar sala"
+    $("aviso-convite").hidden = false;
+    $("codigo-convite").textContent = codigo.toUpperCase();
+    for (const id of ["subtitulo-inicio", "btn-criar", "ou-inicio"]) $(id).hidden = true;
+    $("btn-entrar").classList.add("principal");
+    $("btn-entrar").textContent = "Entrar na sala " + codigo.toUpperCase();
   }
   mostrar("inicio");
+  if (codigo) $("nome").focus();
 })();

@@ -1,4 +1,4 @@
-"""Gera o folder (A4 paisagem, frente e verso, dobra ao meio) e os 6 cards do Instagram em HTML."""
+"""Gera o folder (A4 paisagem, frente e verso, 8 painéis, dobra em sanfona) e os 6 cards do Instagram em HTML."""
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parents[1]   # pasta docs/
@@ -144,102 +144,207 @@ CARDS = [
     <p class="suave" style="font-size:19px;margin-top:22px">{MARCA}</p>''',
 ]
 
-# ------------------------------------------------------------------ Folder (A4 paisagem, 2 páginas, dobra ao meio)
+# ------------------------------------------------------------------ Folder (A4 paisagem, 8 painéis, dobra em sanfona)
+# Frente (página 1): A1 capa | A2 problema | A3 como aprende | A4 jogue agora (contracapa)
+# Verso  (página 2): B1 ideia do SVM | B2 resultado | B3 protótipo | B4 quem fez
+# Impressão frente e verso virando pela borda curta: B4 fica atrás da capa e B1 atrás da contracapa.
+INSTAGRAM_URL = "instagram.com/arena.svm"
 CSS_FOLDER = CORES + """
 @page { size:A4 landscape; margin:0; }
 body { width:297mm; color:#1b1f2e; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-.folha { width:297mm; height:210mm; display:flex; page-break-after:always; overflow:hidden; }
-.painel { width:148.5mm; height:210mm; padding:13mm 12mm; display:flex; flex-direction:column; }
+.folha { width:297mm; height:210mm; display:flex; page-break-after:always; overflow:hidden; position:relative; }
+.painel { width:74.25mm; height:210mm; padding:11mm 7.5mm 9mm; display:flex; flex-direction:column; position:relative; }
 .escuro { background:linear-gradient(180deg,#1b1f2e,#232a44); color:var(--texto); }
 .claro { background:#fbfaf3; }
-.dobra { border-left:.3mm dashed #c9c9c9; }
-h1 { font-family:var(--pixel); font-size:19pt; line-height:1.6; }
+.dobra { position:absolute; top:0; bottom:0; width:0; border-left:.25mm dashed rgba(140,140,150,.45); }
+.marca-dobra { position:absolute; top:2mm; font:6pt Inter,sans-serif; color:#9aa3bf; transform:translateX(-50%); }
+h1 { font-family:var(--pixel); font-size:12.5pt; line-height:1.65; }
 h1 em { color:var(--amarelo); font-style:normal; }
-h2 { font-family:var(--pixel); font-size:10.5pt; line-height:1.6; color:#2d5fa3; margin:0 0 3mm; }
+h2 { font-family:var(--pixel); font-size:8.6pt; line-height:1.6; color:#2d5fa3; margin:0 0 3mm; }
 .escuro h2 { color:var(--amarelo); }
-p { font-size:10.5pt; line-height:1.5; margin-bottom:3mm; }
-.pq { font-size:8.5pt; color:#5b6480; }
+h3 { font-size:9.2pt; font-weight:800; margin:0 0 1mm; }
+p { font-size:8.9pt; line-height:1.48; margin-bottom:2.6mm; }
+.pq { font-size:7.2pt; line-height:1.45; color:#5b6480; }
 .escuro .pq { color:var(--suave); }
-.caixa { background:#fff; border:.5mm solid #d8dbe6; border-radius:3mm; padding:4mm; }
+.caixa { background:#fff; border:.4mm solid #d8dbe6; border-radius:2.5mm; padding:3mm; margin-bottom:2.6mm; }
 .escuro .caixa { background:var(--cartao); border-color:var(--borda); }
-.num { font-family:var(--pixel); font-size:22pt; color:#2d5fa3; }
-.passos { display:grid; grid-template-columns:1fr 1fr 1fr; gap:3mm; margin:2mm 0 4mm; }
-.passos .caixa { font-size:8.8pt; line-height:1.4; padding:3mm; }
-.passos b { display:block; font-family:var(--pixel); font-size:7.5pt; color:#2d5fa3; margin-bottom:1.5mm; line-height:1.5; }
+.caixa p:last-child { margin-bottom:0; }
+.num { font-family:var(--pixel); font-size:20pt; color:#2d5fa3; line-height:1.3; }
+.passo { display:flex; gap:2.6mm; align-items:flex-start; }
+.passo .n { flex-shrink:0; width:7mm; height:7mm; border-radius:50%; background:#2d5fa3; color:#fff; font-family:var(--pixel);
+            font-size:7pt; display:flex; align-items:center; justify-content:center; }
+.passo p { margin:0; font-size:8.4pt; }
+.barra { margin-bottom:2.2mm; }
+.barra .rot { font-size:7.6pt; font-weight:600; margin-bottom:.8mm; }
+.barra .trilho { background:#e4e7f0; border-radius:1.5mm; height:5mm; }
+.barra .cheio { height:100%; border-radius:1.5mm; display:flex; align-items:center; justify-content:flex-end; padding-right:1.6mm;
+                font-family:var(--pixel); font-size:6.4pt; color:#fff; }
+table.cmp { width:100%; border-collapse:collapse; font-size:8pt; margin-bottom:2.6mm; }
+table.cmp td { padding:1.2mm 1mm; border-bottom:.25mm solid #e1e4ee; }
+table.cmp td:last-child { text-align:right; font-weight:700; }
+table.cmp tr.svm td { color:#2d5fa3; }
+.print { width:100%; border-radius:2mm; border:.4mm solid #1b1f2e; display:block; margin-bottom:2mm; }
+.qr { background:#fff; border-radius:2.5mm; padding:2mm; display:inline-block; }
+.qr img { display:block; }
+.selo { display:inline-block; background:var(--amarelo); color:#1b1f2e; font-family:var(--pixel); font-size:6.4pt;
+        padding:1.4mm 2.2mm; border-radius:1.5mm; }
 """
 
 
+def barras_folder():
+    out = ""
+    for nome, v, cor in BARRAS:
+        out += f'''<div class="barra"><div class="rot">{nome}</div><div class="trilho">
+          <div class="cheio" style="width:{v}%;background:{cor}">{str(v).replace(".", ",")}%</div></div></div>'''
+    return out
+
+
+def dobras(rotulo):
+    """Linhas tracejadas suaves nas 3 dobras (marcam onde dobrar)."""
+    return "".join(f'<div class="dobra" style="left:{74.25 * i}mm"></div>'
+                   f'<div class="marca-dobra" style="left:{74.25 * i}mm">{rotulo}</div>' for i in (1, 2, 3))
+
+
 def folder():
-    fora = f'''<div class="folha">
-  <div class="painel claro">
-    <h2>Quem fez</h2>
-    <p>Alceu Ferreira dos Santos Neto<br>Anthony Gabriel Schirato Lourenço<br>Gustavo de Carvalho Vieira<br>
-       Luan Carlos de Souza Ferreira<br>Lucas Miguel Moreno Rios</p>
-    <p class="pq">Disciplina de Inteligência Artificial II · Ciência da Computação<br>Faculdades Integradas de Bauru (FIB) ·
-       Prof. Ronaldo Cesar Dametto · 2026</p>
-    <h2 style="margin-top:6mm">Quer testar?</h2>
-    <div class="caixa" style="display:flex;gap:5mm;align-items:center">
-      <img src="{IMG}/qr_jogo.png" style="width:42mm;height:42mm">
-      <div><p><b>Aponte a câmera e jogue</b>: desafie um amigo e veja a IA explicar cada aposta.</p>
-        <p style="font-size:10pt;margin:0 0 2mm"><b>{JOGO}</b></p>
-        <p class="pq" style="margin:0">Código, dados e experimentos: {REPO}<br>Instagram: <b>{INSTAGRAM}</b></p></div>
-    </div>
-    <h2 style="margin-top:6mm">Vale lembrar</h2>
-    <p class="pq" style="font-size:9pt">As batalhas vêm de um simulador próprio, mais simples que o jogo real (sem habilidades, itens
-       ou estratégia). A IA aprende as regras desse simulador: ela não serve para prever partidas competitivas.</p>
-    <p class="pq" style="margin-top:auto">{MARCA} Dados: PokéAPI.</p>
-  </div>
-  <div class="painel escuro dobra" style="justify-content:space-between">
-    <div class="px" style="font-size:9pt;color:var(--suave)">ARENA <span style="color:var(--amarelo)">SVM</span></div>
+    frente = f'''<div class="folha">
+  <!-- A1: capa -->
+  <div class="painel escuro" style="justify-content:space-between">
+    <div class="px" style="font-size:8pt;color:var(--suave)">ARENA <span style="color:var(--amarelo)">SVM</span></div>
     <div>
       <h1>Uma IA consegue prever <em>quem vence</em> uma batalha Pokémon?</h1>
-      <div style="display:flex;justify-content:center;align-items:flex-end;gap:2mm;margin-top:8mm">
-        <img class="spr" src="{SPR}/6.png" style="width:52mm"><span class="px" style="font-size:16pt;color:var(--vermelho);padding-bottom:20mm">VS</span>
-        <img class="spr" src="{SPR}/9.png" style="width:52mm"></div>
+      <div style="position:relative;height:62mm;margin-top:5mm">
+        <img class="spr" src="{SPR}/6.png" style="width:40mm;position:absolute;left:-3mm;top:0">
+        <span class="px" style="position:absolute;right:4mm;top:14mm;font-size:14pt;color:var(--vermelho)">VS</span>
+        <img class="spr" src="{SPR}/9.png" style="width:40mm;position:absolute;right:-3mm;bottom:0">
+      </div>
     </div>
-    <p style="font-size:11pt;color:var(--suave)">Ensinamos um computador a apostar no favorito, e ele ainda explica por que escolheu.
-      <br><span style="color:var(--amarelo)">Jogue em {JOGO}</span></p>
+    <div>
+      <p style="color:var(--suave)">Ensinamos um computador a apostar no favorito, e ele ainda <b style="color:var(--texto)">explica
+        por que</b> escolheu.</p>
+      <span class="selo">JOGUE ONLINE</span>
+      <p style="margin:1.5mm 0 0;font-weight:700;color:var(--amarelo)">{JOGO}</p>
+      <p class="pq" style="margin:3.5mm 0 0">Inteligência Artificial II · Ciência da Computação · FIB · 2026</p>
+    </div>
   </div>
-</div>'''
-    dentro = f'''<div class="folha">
+
+  <!-- A2: problema -->
   <div class="painel claro">
     <h2>O problema</h2>
-    <p>Existem <b>1.242 Pokémon</b> e mais de <b>770 mil confrontos</b> possíveis. Antes da batalha, como saber quem leva
-       vantagem? Regras simples ajudam pouco: o mais rápido vence só <b>68%</b> das vezes, e o mais forte, <b>81%</b>.</p>
-    <h2 style="margin-top:3mm">Como a IA aprende</h2>
-    <div class="passos">
-      <div class="caixa"><b>1. Exemplos</b>Um simulador com a fórmula de dano do jogo gerou 40 mil confrontos, cada um repetido 21 vezes.</div>
-      <div class="caixa"><b>2. Treino</b>A IA estuda as batalhas dos Pokémon das gerações 1 a 6 e descobre padrões.</div>
-      <div class="caixa"><b>3. Prova</b>Ela é testada com Pokémon das gerações 7 a 9, que nunca viu.</div>
+    <p>Existem <b>1.242 Pokémon</b> e mais de <b>770 mil confrontos</b> possíveis. Antes de a batalha começar, dá para
+       saber quem leva vantagem?</p>
+    <div class="caixa">
+      <h3>Regras de bolso ajudam pouco</h3>
+      <p>O mais <b>rápido</b> vence só <b>68%</b> das vezes.<br>O mais <b>forte</b> (soma dos atributos), <b>81%</b>.</p>
     </div>
+    <p>Uma batalha depende de muita coisa ao mesmo tempo: velocidade, ataque, defesa, <b>vantagem de tipo</b> (água apaga
+       fogo) e os <b>golpes</b> que cada um sabe.</p>
+    <div class="caixa" style="background:#eef3fb;border-color:#c9d6ee">
+      <h3>A nossa pergunta</h3>
+      <p>Uma IA que estuda milhares de batalhas aprende a combinar tudo isso melhor do que as regras de bolso?</p>
+    </div>
+    <p class="pq" style="margin-top:auto">Spoiler: aprende. Acerta <b>92,6%</b>, e o jeito como ela decide cabe em um desenho
+       (veja do outro lado).</p>
+  </div>
+
+  <!-- A3: como aprende -->
+  <div class="painel claro">
+    <h2>Como a IA aprende</h2>
+    <div class="caixa passo"><div class="n">1</div><p><b>Exemplos.</b> Um simulador com a fórmula de dano do jogo gerou
+      <b>40 mil confrontos</b>, cada um repetido 21 vezes. Vence quem ganhar a maioria.</p></div>
+    <div class="caixa passo"><div class="n">2</div><p><b>Treino.</b> A IA estuda as batalhas dos Pokémon das
+      <b>gerações 1 a 6</b> e procura padrões.</p></div>
+    <div class="caixa passo"><div class="n">3</div><p><b>Prova.</b> Depois é testada com Pokémon das <b>gerações 7 a 9</b>,
+      que ela <b>nunca viu</b>. Nada de decorar resposta.</p></div>
+    <h2 style="margin-top:2mm">O que ela recebe</h2>
+    <p>Só o que se sabe <b>antes</b> da luta: <b>15 informações</b> por batalha, como a diferença de velocidade, de ataque, a
+       vantagem de tipo e a força do melhor golpe de cada lado.</p>
+    <div class="caixa" style="background:#eef3fb;border-color:#c9d6ee"><h3>Por que separar por geração?</h3>
+      <p>Se a prova tivesse Pokémon do treino, a IA poderia só reconhecer rostos conhecidos. Separando, medimos se ela
+      aprendeu de verdade.</p></div>
+    <p class="pq" style="margin-top:auto">Dados: PokéAPI (atributos, tipos e golpes de 1.242 Pokémon).</p>
+  </div>
+
+  <!-- A4: contracapa (jogue agora) -->
+  <div class="painel escuro" style="text-align:center;align-items:center">
+    <h2 style="font-size:10pt">Jogue agora!</h2>
+    <div class="qr"><img src="{IMG}/qr_jogo.png" style="width:42mm;height:42mm"></div>
+    <p style="margin:2.5mm 0 1mm;font-weight:700;font-size:9.5pt">{JOGO}</p>
+    <p class="pq" style="margin-bottom:0">Crie uma sala e mande o <b style="color:var(--texto)">link</b> ou o
+      <b style="color:var(--texto)">QR Code da sala</b> para um amigo entrar. A IA aposta e explica cada batalha.</p>
+    <div style="border-top:.3mm dashed var(--borda);width:100%;margin:6mm 0 5mm"></div>
+    <h2>Siga a gente</h2>
+    <div class="qr"><img src="{IMG}/qr_instagram.png" style="width:30mm;height:30mm"></div>
+    <p style="margin:2.5mm 0 0;font-weight:700;font-size:9.5pt;color:var(--amarelo)">{INSTAGRAM}</p>
+    <p class="pq" style="margin-top:auto">Código, dados e experimentos:<br>{REPO}</p>
+  </div>
+  {dobras("dobre aqui")}
+</div>'''
+
+    verso = f'''<div class="folha">
+  <!-- B1: ideia do SVM -->
+  <div class="painel claro">
     <h2>A ideia do SVM</h2>
-    <div style="display:flex;gap:5mm;align-items:center">
-      <div class="caixa" style="width:62mm;flex-shrink:0;padding:2mm 3mm">{svg_svm(claro=True)}</div>
-      <p style="font-size:9.8pt;margin:0">Cada batalha vira um ponto. A técnica, chamada <b>Máquina de Vetores de Suporte (SVM)</b>,
-        traça a <b>rua mais larga possível</b> separando as batalhas que um lado vence das que o outro vence. Uma batalha nova
-        é classificada pelo lado da rua em que cai. Os pontos na beira da rua (circulados) são os únicos que definem a decisão.</p>
-    </div>
-    <p class="pq" style="margin-top:auto">A IA recebe só o que se sabe antes da luta: atributos, tipos e golpes de cada Pokémon.</p>
+    <p>Cada batalha vira um <b>ponto</b>. A técnica <b>Máquina de Vetores de Suporte (SVM)</b> traça a
+       <b>rua mais larga possível</b> entre as batalhas que um lado vence e as que o outro vence.</p>
+    <div class="caixa" style="padding:2mm 2.5mm">{svg_svm(claro=True)}</div>
+    <p>Uma batalha nova é classificada pelo <b>lado da rua</b> em que cai. Quanto mais longe da faixa amarela, mais segura
+       a aposta.</p>
+    <div class="caixa"><h3>Vetores de suporte</h3><p>Os pontos circulados, na beira da rua, são os únicos que definem a
+      decisão. Os outros podem até sumir.</p></div>
+    <div class="caixa"><h3>E quando a rua não é reta?</h3><p>Com o <b>kernel RBF</b>, o SVM curva a fronteira para
+      seguir os padrões dos dados.</p></div>
   </div>
-  <div class="painel claro dobra">
+
+  <!-- B2: resultado -->
+  <div class="painel claro">
     <h2>O resultado</h2>
-    <div style="display:flex;gap:5mm;align-items:center;margin-bottom:4mm">
-      <div class="num">92,6%</div>
-      <p style="margin:0">de acerto no favorito, em batalhas entre Pokémon que a IA <b>nunca tinha visto</b>.</p>
-    </div>
-    <div style="margin-bottom:2mm">{barras(altura=18, fonte=9.5, cor_txt="#1b1f2e", trilho="#e4e7f0").replace("px", "pt").replace("10pt;height", "2mm;height")}</div>
-    <p style="font-size:9.8pt"><b>Descoberta:</b> o que mais melhorou a IA não foi trocar o algoritmo, e sim dar a ela a informação certa:
-       os golpes que cada Pokémon aprende. Ela ainda erra quando a <b>sorte</b> decide a batalha.</p>
-    <h2 style="margin-top:2mm">O protótipo: Arena SVM</h2>
-    <div style="display:flex;gap:4mm;align-items:center">
-      <img src="{IMG}/arena_batalha.png" style="width:64mm;border-radius:2mm;border:.5mm solid #1b1f2e">
-      <p style="font-size:9.5pt;margin:0">Dois jogadores escolhem seus Pokémon, a IA aposta no favorito e a batalha acontece na tela.
-        Depois, o jogo mostra <b>por que</b> a IA apostou assim: a fronteira, o que mais pesou e as batalhas em que ela se baseou.</p>
+    <div class="num">92,6%</div>
+    <p>de acerto no favorito, em batalhas entre Pokémon que a IA <b>nunca tinha visto</b>.</p>
+    {barras_folder()}
+    <h3 style="margin-top:1.5mm">E os outros algoritmos?</h3>
+    <table class="cmp">
+      <tr class="svm"><td>SVM (RBF)</td><td>92,6%</td></tr>
+      <tr><td>Regressão logística</td><td>91,8%</td></tr>
+      <tr><td>KNN (k = 91)</td><td>91,1%</td></tr>
+    </table>
+    <p><b>Descoberta:</b> o que mais ajudou não foi trocar o algoritmo, e sim dar a informação certa: os <b>golpes</b>.
+       Ela ainda erra quando a <b>sorte</b> decide.</p>
+    <div class="caixa" style="margin-top:auto;background:#fff7d6;border-color:#f0dc8a"><h3>Cuidado com a escala</h3>
+      <p>Sem padronizar os números, o KNN cai para <b>81,5%</b> e o SVM para <b>90,4%</b>: um atributo de valores grandes
+      “grita” mais que os outros.</p></div>
+  </div>
+
+  <!-- B3: protótipo -->
+  <div class="painel claro">
+    <h2>O protótipo</h2>
+    <img class="print" src="{IMG}/arena_batalha.png">
+    <p><b>Arena:</b> dois jogadores escolhem seus Pokémon, a IA aposta no favorito e a batalha acontece na tela. Depois, ela
+       mostra <b>por que</b> apostou assim.</p>
+    <img class="print" src="{IMG}/arena_fronteira.png" style="width:78%;margin:0 auto 2mm">
+    <p style="margin-bottom:0"><b>Laboratório:</b> monte seu próprio personagem, mexa nos atributos e veja a
+       <b>fronteira do SVM</b> se mover ao vivo.</p>
+  </div>
+
+  <!-- B4: quem fez (fica atrás da capa) -->
+  <div class="painel escuro">
+    <h2>Quem fez</h2>
+    <p style="line-height:1.7">Alceu Ferreira dos Santos Neto<br>Anthony Gabriel Schirato Lourenço<br>Gustavo de Carvalho Vieira<br>
+       Luan Carlos de Souza Ferreira<br>Lucas Miguel Moreno Rios</p>
+    <p class="pq">Disciplina de Inteligência Artificial II<br>Ciência da Computação<br>Faculdades Integradas de Bauru (FIB)<br>
+       Prof. Ronaldo Cesar Dametto · 2026</p>
+    <h2 style="margin-top:5mm">Vale lembrar</h2>
+    <p class="pq" style="font-size:7.8pt">As batalhas vêm de um simulador próprio, mais simples que o jogo real (sem
+       habilidades, itens ou troca de Pokémon). A IA aprende as regras desse simulador: ela não serve para prever partidas
+       competitivas.</p>
+    <div style="margin-top:auto;display:flex;gap:3mm;align-items:center">
+      <img class="spr" src="{SPR}/25.png" style="width:20mm">
+      <p class="pq" style="margin:0">{MARCA}</p>
     </div>
   </div>
+  {dobras("")}
 </div>'''
     return f'''<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">{FONTES}<style>{CSS_FOLDER}</style></head>
-<body>{fora}{dentro}</body></html>'''
+<body>{frente}{verso}</body></html>'''
 
 
 def main():
