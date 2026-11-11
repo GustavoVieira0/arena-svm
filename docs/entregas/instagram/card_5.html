@@ -31,28 +31,34 @@ p b, li b { color:var(--amarelo); }
 </style></head>
 <body><div class="card"><div class="topo"><span>ARENA <b>SVM</b></span><span>5/6</span></div><div class="miolo"><h2>O experimento</h2>
     <p>Acerto em batalhas de Pokémon que a IA nunca viu:</p>
-    <div style="margin:14px 0 10px"><div style="margin-bottom:22.04px">
-          <div style="font-size:26px;font-weight:600;color:#eef1f8;margin-bottom:6px">Vence o mais rápido</div>
-          <div style="background:#151927;border-radius:10px;height:58px;position:relative">
+    <div style="margin:10px 0 0"><div style="margin-bottom:19.0px">
+          <div style="font-size:24px;font-weight:600;color:#eef1f8;margin-bottom:6px">Vence o mais rápido</div>
+          <div style="background:#151927;border-radius:10px;height:50px;position:relative">
             <div style="width:67.8%;height:100%;background:#7c86a8;border-radius:10px;display:flex;align-items:center;
-                 justify-content:flex-end;padding-right:14px;font-family:var(--pixel);font-size:20.8px;color:#fff">
-              67,8%</div></div></div><div style="margin-bottom:22.04px">
-          <div style="font-size:26px;font-weight:600;color:#eef1f8;margin-bottom:6px">Vence o mais forte</div>
-          <div style="background:#151927;border-radius:10px;height:58px;position:relative">
+                 justify-content:flex-end;padding-right:14px;font-family:var(--pixel);font-size:19.200000000000003px;color:#fff">
+              67,8%</div></div></div><div style="margin-bottom:19.0px">
+          <div style="font-size:24px;font-weight:600;color:#eef1f8;margin-bottom:6px">Vence o mais forte</div>
+          <div style="background:#151927;border-radius:10px;height:50px;position:relative">
             <div style="width:80.6%;height:100%;background:#7c86a8;border-radius:10px;display:flex;align-items:center;
-                 justify-content:flex-end;padding-right:14px;font-family:var(--pixel);font-size:20.8px;color:#fff">
-              80,6%</div></div></div><div style="margin-bottom:22.04px">
-          <div style="font-size:26px;font-weight:600;color:#eef1f8;margin-bottom:6px">IA (atributos e tipos)</div>
-          <div style="background:#151927;border-radius:10px;height:58px;position:relative">
+                 justify-content:flex-end;padding-right:14px;font-family:var(--pixel);font-size:19.200000000000003px;color:#fff">
+              80,6%</div></div></div><div style="margin-bottom:19.0px">
+          <div style="font-size:24px;font-weight:600;color:#eef1f8;margin-bottom:6px">IA (atributos e tipos)</div>
+          <div style="background:#151927;border-radius:10px;height:50px;position:relative">
             <div style="width:86.6%;height:100%;background:#3d7dca;border-radius:10px;display:flex;align-items:center;
-                 justify-content:flex-end;padding-right:14px;font-family:var(--pixel);font-size:20.8px;color:#fff">
-              86,6%</div></div></div><div style="margin-bottom:22.04px">
-          <div style="font-size:26px;font-weight:600;color:#eef1f8;margin-bottom:6px">IA + golpes de cada Pokémon</div>
-          <div style="background:#151927;border-radius:10px;height:58px;position:relative">
+                 justify-content:flex-end;padding-right:14px;font-family:var(--pixel);font-size:19.200000000000003px;color:#fff">
+              86,6%</div></div></div><div style="margin-bottom:19.0px">
+          <div style="font-size:24px;font-weight:600;color:#eef1f8;margin-bottom:6px">IA + golpes de cada Pokémon</div>
+          <div style="background:#151927;border-radius:10px;height:50px;position:relative">
             <div style="width:92.6%;height:100%;background:#3fbf5f;border-radius:10px;display:flex;align-items:center;
-                 justify-content:flex-end;padding-right:14px;font-family:var(--pixel);font-size:20.8px;color:#fff">
+                 justify-content:flex-end;padding-right:14px;font-family:var(--pixel);font-size:19.200000000000003px;color:#fff">
               92,6%</div></div></div></div>
-    <p style="font-size:34px">O que mais ajudou <b>não foi trocar o algoritmo</b>: foi dar à IA a informação certa
+    <p style="font-size:30px;margin:6px 0 16px">E se trocarmos o algoritmo? Com as mesmas informações:</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px">
+      <div class="caixa" style="padding:22px;border-color:var(--verde)"><span class="num" style="font-size:36px">92,6%</span><span style="font-size:26px">SVM</span></div>
+      <div class="caixa" style="padding:22px"><span class="num" style="font-size:36px;color:var(--texto)">91,8%</span><span style="font-size:26px">Regressão logística</span></div>
+      <div class="caixa" style="padding:22px"><span class="num" style="font-size:36px;color:var(--texto)">91,1%</span><span style="font-size:26px">KNN</span></div>
+    </div>
+    <p style="font-size:30px;margin:24px 0 0">O que mais ajudou <b>não foi trocar o algoritmo</b>: foi dar à IA a informação certa
        (os golpes de cada Pokémon).</p></div>
 <div class="rodape"><span><b style="color:var(--amarelo)">@arena.svm</b> · Inteligência Artificial II · Ciência da Computação · FIB</span><span class="px">arraste →</span></div>
 </div></body></html>

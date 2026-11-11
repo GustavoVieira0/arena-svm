@@ -10,7 +10,7 @@
 | Vídeo (1 a 3 min) | [`video/roteiro_video.md`](video/roteiro_video.md) | Roteiro pronto; falta gravar |
 | Model Card (1 página) | [`Model_Card.pdf`](Model_Card.pdf) · [`.docx`](Model_Card.docx) | Pronto |
 | Ficha de experimentos | [`Ficha_de_Experimentos.pdf`](Ficha_de_Experimentos.pdf) · [`.docx`](Ficha_de_Experimentos.docx) | Pronto |
-| Palestra (40 a 60 min) | | A fazer |
+| Palestra (~30 min) | [`palestra/Arena_SVM_Palestra.pptx`](palestra/Arena_SVM_Palestra.pptx) · [falas](palestra/falas_por_integrante.md) · [roteiro](palestra/roteiro_palestra.md) | Pronto (falta ensaiar) |
 
 ## Como imprimir o folder
 Papel A4, orientação **paisagem**, **frente e verso** com virada pela **borda curta**, escala 100% (sem "ajustar à página").

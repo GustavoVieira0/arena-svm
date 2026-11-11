@@ -127,8 +127,14 @@ CARDS = [
 
     f'''<h2>O experimento</h2>
     <p>Acerto em batalhas de Pokémon que a IA nunca viu:</p>
-    <div style="margin:14px 0 10px">{barras()}</div>
-    <p style="font-size:34px">O que mais ajudou <b>não foi trocar o algoritmo</b>: foi dar à IA a informação certa
+    <div style="margin:10px 0 0">{barras(altura=50, fonte=24)}</div>
+    <p style="font-size:30px;margin:6px 0 16px">E se trocarmos o algoritmo? Com as mesmas informações:</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px">
+      <div class="caixa" style="padding:22px;border-color:var(--verde)"><span class="num" style="font-size:36px">92,6%</span><span style="font-size:26px">SVM</span></div>
+      <div class="caixa" style="padding:22px"><span class="num" style="font-size:36px;color:var(--texto)">91,8%</span><span style="font-size:26px">Regressão logística</span></div>
+      <div class="caixa" style="padding:22px"><span class="num" style="font-size:36px;color:var(--texto)">91,1%</span><span style="font-size:26px">KNN</span></div>
+    </div>
+    <p style="font-size:30px;margin:24px 0 0">O que mais ajudou <b>não foi trocar o algoritmo</b>: foi dar à IA a informação certa
        (os golpes de cada Pokémon).</p>''',
 
     f'''<h2>O resultado</h2>
@@ -139,6 +145,7 @@ CARDS = [
       <img src="{IMG}/qr_jogo.png" style="width:300px;height:300px;border-radius:14px">
       <div><div class="px" style="font-size:26px;line-height:1.7;color:var(--amarelo)">Jogue agora e desafie um amigo</div>
         <p style="font-size:30px;margin:16px 0 6px;font-weight:700">{JOGO}</p>
+        <p style="font-size:24px;margin:0 0 8px">Crie uma sala e mande o <b>link</b> ou o <b>QR Code</b> para seu amigo entrar.</p>
         <p class="suave" style="font-size:22px;margin:0">Código: {REPO}</p></div>
     </div>
     <p class="suave" style="font-size:19px;margin-top:22px">{MARCA}</p>''',
@@ -277,7 +284,7 @@ def folder():
     <p style="margin:2.5mm 0 0;font-weight:700;font-size:9.5pt;color:var(--amarelo)">{INSTAGRAM}</p>
     <p class="pq" style="margin-top:auto">Código, dados e experimentos:<br>{REPO}</p>
   </div>
-  {dobras("dobre aqui")}
+  {dobras("")}
 </div>'''
 
     verso = f'''<div class="folha">
