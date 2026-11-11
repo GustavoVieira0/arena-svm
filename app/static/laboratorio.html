@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Laboratório · Arena SVM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/estilo.css">
+<link rel="stylesheet" href="/static/laboratorio.css">
+</head>
+<body>
+<header class="topo">
+  <h1>ARENA <span>SVM</span> · <small>LABORATÓRIO</small></h1>
+  <a href="/" class="voltar">← voltar à arena</a>
+</header>
+
+<main class="tela lab">
+  <p class="intro">Monte um personagem, escolha um adversário e veja <b>ao vivo</b> em quem a IA aposta, e onde a batalha cai em
+    relação à <b>fronteira de decisão</b> do SVM.</p>
+
+  <div class="lab-grade">
+    <!-- 1. construtor -->
+    <section class="cartao construtor">
+      <h2>1. Seu personagem</h2>
+      <div class="aparencia">
+        <img id="sprite-meu" class="spr-grande" alt="">
+        <div class="aparencia-campos">
+          <label>Nome <input id="nome" maxlength="20" value="Meu personagem"></label>
+          <label>Aparência <input id="busca-aparencia" list="lista-pokemon" placeholder="Digite um Pokémon..."></label>
+          <button id="btn-aparencia" class="botao pequeno">🎲 Aparência aleatória</button>
+        </div>
+      </div>
+      <div class="tipos-sel">
+        <label>Tipo 1 <select id="tipo1"></select></label>
+        <label>Tipo 2 <select id="tipo2"><option value="">(nenhum)</option></select></label>
+      </div>
+      <div id="sliders" class="sliders"></div>
+      <div class="total-linha"><span>Total</span><b id="total">0</b></div>
+      <div class="acoes-lab">
+        <button id="btn-equilibrar" class="botao pequeno">Equilibrado</button>
+        <button id="btn-veloz" class="botao pequeno">Veloz e frágil</button>
+        <button id="btn-tanque" class="botao pequeno">Tanque</button>
+        <button id="btn-aleatorio" class="botao pequeno">🎲 Aleatório</button>
+      </div>
+      <p class="dica">Personagens criados lutam com golpes genéricos dos seus tipos (80 de poder) e um golpe Normal (70).</p>
+    </section>
+
+    <!-- 2. adversário + previsão -->
+    <section class="cartao">
+      <h2>2. Adversário</h2>
+      <div class="aparencia">
+        <img id="sprite-adv" class="spr-grande" alt="">
+        <div class="aparencia-campos">
+          <label>Pokémon <input id="busca-adv" list="lista-pokemon" placeholder="Digite um Pokémon..."></label>
+          <button id="btn-adv-aleatorio" class="botao pequeno">🎲 Sortear adversário</button>
+          <div id="info-adv" class="dica"></div>
+        </div>
+      </div>
+
+      <h2 style="margin-top:16px">3. Previsão da IA</h2>
+      <div id="previsao-lab" class="previsao-lab">Ajuste o personagem para ver a previsão.</div>
+      <div class="regua" id="regua-lab">
+        <div class="eixo"></div><div class="margem"></div><div class="hiperplano" style="left:50%"></div>
+        <div class="ponto" id="ponto-regua"></div>
+      </div>
+      <div class="regua-legenda"><span id="leg-b">← adversário</span><span>margem</span><span id="leg-a">você →</span></div>
+
+      <button id="btn-simular" class="botao principal" style="width:100%;margin-top:14px">Simular batalha (201 vezes)</button>
+      <div id="resultado-sim" class="resultado-sim"></div>
+    </section>
+
+    <!-- 4. fronteira 2D -->
+    <section class="cartao fronteira-cartao">
+      <h2>4. A fronteira do SVM</h2>
+      <p class="explica">Corte do modelo real: variamos só as duas diferenças escolhidas abaixo (você − adversário) e mantemos
+        as outras 13 variáveis desta batalha. <b class="cor-a">Vermelho</b>: a IA aposta em você.
+        <b class="cor-b">Azul</b>: aposta no adversário. A linha amarela é a <b>fronteira</b>; as tracejadas, a <b>margem</b>.
+        O ponto branco é a sua batalha agora.</p>
+      <div class="eixos">
+        <label>Eixo horizontal <select id="eixo-x"></select></label>
+        <label>Eixo vertical <select id="eixo-y"></select></label>
+      </div>
+      <div class="canvas-wrap"><canvas id="canvas-fronteira" width="440" height="440"></canvas></div>
+      <details class="topico" style="margin-top:10px">
+        <summary>O que mais pesou nesta previsão</summary>
+        <div class="bloco" id="fatores-lab"></div>
+      </details>
+    </section>
+  </div>
+</main>
+
+<datalist id="lista-pokemon"></datalist>
+<script src="/static/sprites.js"></script>
+<script src="/static/laboratorio.js"></script>
+</body>
+</html>

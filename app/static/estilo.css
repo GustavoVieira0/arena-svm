@@ -220,3 +220,9 @@ input, select {
     background: var(--cartao); border-top: 3px solid var(--borda); box-shadow: 0 -6px 20px #0009;
   }
 }
+
+/* atalhos para o Laboratório */
+.link-lab { display: block; text-align: center; margin-top: 6px; padding: 10px; border: 2px dashed var(--borda);
+            border-radius: 8px; color: var(--destaque); text-decoration: none; font-size: 13px; font-weight: 600; }
+.link-lab:hover { border-color: var(--destaque); }
+.link-lab-botao { text-decoration: none; display: inline-flex; align-items: center; }

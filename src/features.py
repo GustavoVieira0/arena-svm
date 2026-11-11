@@ -52,6 +52,15 @@ def _golpes(la, lb):
             "prioridade_a": pa, "prioridade_b": pb}
 
 
+def linha_de(ra, rb, la, lb, golpes=True):
+    """Features de A × B a partir das linhas de atributos/tipos (ra, rb) e dos lutadores (la, lb).
+    Serve também para personagens criados no Laboratório, que não estão na base."""
+    x = _base(ra, rb)
+    if golpes:
+        x |= _golpes(la, lb)
+    return x
+
+
 class Extrator:
     """Calcula as features para pares de pokeapi_id, com cache dos lutadores."""
 
@@ -65,11 +74,7 @@ class Extrator:
         return self._lut[pid]
 
     def linha(self, a_id, b_id, golpes=True):
-        ra, rb = self.info.loc[a_id], self.info.loc[b_id]
-        x = _base(ra, rb)
-        if golpes:
-            x |= _golpes(self.lutador(a_id), self.lutador(b_id))
-        return x
+        return linha_de(self.info.loc[a_id], self.info.loc[b_id], self.lutador(a_id), self.lutador(b_id), golpes)
 
     def tabela(self, batalhas: pd.DataFrame, golpes=True):
         return pd.DataFrame([self.linha(a, b, golpes) for a, b in zip(batalhas.a_id, batalhas.b_id)],

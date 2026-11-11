@@ -6,6 +6,7 @@ IMG = "../../img"   # caminho relativo às pastas folder/ e instagram/
 SPR = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon"
 REPO = "github.com/GustavoVieira0/arena-svm"
 JOGO = "arena-svm.onrender.com"
+INSTAGRAM = "@arena.svm"
 FONTES = ('<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;600;700;800'
           '&display=swap" rel="stylesheet">')
 CORES = """
@@ -84,7 +85,7 @@ p b, li b { color:var(--amarelo); }
 def card(n, corpo):
     return f'''<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">{FONTES}<style>{CSS_IG}</style></head>
 <body><div class="card"><div class="topo"><span>ARENA <b>SVM</b></span><span>{n}/6</span></div><div class="miolo">{corpo}</div>
-<div class="rodape"><span>Inteligência Artificial II · Ciência da Computação · FIB</span><span class="px">{"arraste →" if n < 6 else ""}</span></div>
+<div class="rodape"><span><b style="color:var(--amarelo)">{INSTAGRAM}</b> · Inteligência Artificial II · Ciência da Computação · FIB</span><span class="px">{"arraste →" if n < 6 else ""}</span></div>
 </div></body></html>'''
 
 
@@ -181,7 +182,7 @@ def folder():
       <img src="{IMG}/qr_jogo.png" style="width:42mm;height:42mm">
       <div><p><b>Aponte a câmera e jogue</b>: desafie um amigo e veja a IA explicar cada aposta.</p>
         <p style="font-size:10pt;margin:0 0 2mm"><b>{JOGO}</b></p>
-        <p class="pq" style="margin:0">Código, dados e experimentos: {REPO}</p></div>
+        <p class="pq" style="margin:0">Código, dados e experimentos: {REPO}<br>Instagram: <b>{INSTAGRAM}</b></p></div>
     </div>
     <h2 style="margin-top:6mm">Vale lembrar</h2>
     <p class="pq" style="font-size:9pt">As batalhas vêm de um simulador próprio, mais simples que o jogo real (sem habilidades, itens

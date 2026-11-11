@@ -1,0 +1,38 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { width:1080px; height:1080px; overflow:hidden;
+         background: radial-gradient(circle at 50% 45%, #2c3456 0%, #1b1f2e 62%, #141826 100%);
+         display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:"Press Start 2P",monospace; }
+  /* tudo dentro do círculo central (o Instagram recorta a foto em círculo) */
+  .simbolo { width:600px; height:460px; margin-top:10px; }
+  .nome { font-size:74px; color:#eef1f8; letter-spacing:4px; margin-top:40px; text-shadow:0 6px 0 #0b0d14; }
+  .nome b { color:#ffcb05; font-weight:normal; }
+</style></head><body>
+<svg class="simbolo" viewBox="0 0 560 430" xmlns="http://www.w3.org/2000/svg">
+  <!-- "rua" (margem) do SVM -->
+  <polygon points="225,0 335,0 375,430 265,430" fill="#ffcb05" opacity=".22"/>
+  <line x1="225" y1="0" x2="265" y2="430" stroke="#ffcb05" stroke-width="7" stroke-dasharray="20 14"/>
+  <line x1="335" y1="0" x2="375" y2="430" stroke="#ffcb05" stroke-width="7" stroke-dasharray="20 14"/>
+  <line x1="280" y1="0" x2="320" y2="430" stroke="#ffcb05" stroke-width="12"/>
+  <!-- grupo A (vermelho) e grupo B (azul), em "pixels" -->
+  <g fill="#e2453c">
+    <rect x="60" y="70" width="44" height="44" rx="6"/><rect x="140" y="150" width="44" height="44" rx="6"/>
+    <rect x="50" y="220" width="44" height="44" rx="6"/><rect x="120" y="300" width="44" height="44" rx="6"/>
+    <rect x="175" y="60" width="44" height="44" rx="6"/>
+  </g>
+  <g fill="#3d7dca">
+    <rect x="410" y="80" width="44" height="44" rx="6"/><rect x="470" y="170" width="44" height="44" rx="6"/>
+    <rect x="395" y="250" width="44" height="44" rx="6"/><rect x="465" y="330" width="44" height="44" rx="6"/>
+    <rect x="378" y="360" width="44" height="44" rx="6"/>
+  </g>
+  <!-- vetores de suporte (na beira da rua) -->
+  <g fill="none" stroke="#eef1f8" stroke-width="7">
+    <rect x="175" y="215" width="64" height="64" rx="10"/><rect x="345" y="150" width="64" height="64" rx="10"/>
+  </g>
+  <rect x="185" y="225" width="44" height="44" rx="6" fill="#e2453c"/>
+  <rect x="355" y="160" width="44" height="44" rx="6" fill="#3d7dca"/>
+</svg>
+<div class="nome">ARENA <b>SVM</b></div>
+</body></html>

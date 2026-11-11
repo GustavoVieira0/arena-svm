@@ -63,7 +63,8 @@ arena-svm/
 │   └── batalhar.py           # escolha dois Pokémon: previsão do SVM + simulação narrada
 ├── notebooks/
 │   ├── 01_pipeline_duelo_svm.ipynb   # Checkpoint 1: EDA, baselines, SVM e métricas (ponta a ponta)
-│   └── 02_experimentos_svm.ipynb     # Checkpoint 2: experimentos E1–E5, erros e conclusões
+│   ├── 02_experimentos_svm.ipynb     # Checkpoint 2: experimentos E1–E5, erros e conclusões
+│   └── 03_e6_comparacao_knn.ipynb    # E6: comparação com KNN e Regressão Logística, e efeito da escala
 ├── modelos/                  # modelos treinados (.joblib)
 └── docs/                     # resumo expandido, referências, diário de IA, guia do checkpoint
 ```
@@ -116,6 +117,11 @@ ela acha que vence, e a batalha é animada com os sprites dos jogos.
 3. O segundo jogador, **na mesma rede Wi-Fi**, abre o link no celular ou no computador (ou digita o código).
 4. Cada um escolhe o Pokémon e clica em **Pronto!**. A batalha aparece para os dois.
 
+**Laboratório (construtor de personagem):** em `/laboratorio` (https://arena-svm.onrender.com/laboratorio), a pessoa
+monta um personagem (tipos e os 6 atributos), escolhe um adversário e vê ao vivo em quem a IA aposta, junto com um
+**gráfico 2D da fronteira de decisão**: um corte do modelo real, variando duas diferenças de atributos e mantendo as
+outras 13 variáveis. Personagens criados lutam com golpes genéricos dos seus tipos.
+
 **Por que a IA apostou assim?** Durante a batalha, o painel lateral explica a previsão com os conceitos do SVM
 (`app/explicacao.py`): a posição da batalha em relação à **fronteira de decisão e à margem** (score), o **peso de cada
 fator** nesta batalha (estimado neutralizando cada grupo de features), os valores que o modelo comparou e os
@@ -134,6 +140,7 @@ Notebook `notebooks/02_experimentos_svm.ipynb` · guia em `docs/guia_checkpoint2
 | E2: features dos golpes reais | Recupera a queda causada pelos golpes reais | Confirmada: **86,6% → 92,6%** |
 | E3: ajuste de C e gamma (validação nas gerações 5–6) | Ganho pequeno | Sem ganho: 92,6% → 92,6% |
 | E4: divisão aleatória × por geração | A divisão aleatória infla o resultado | Refutada: 92,5% × 92,6% (features relativas, sem identidade do Pokémon) |
+| E6: SVM × KNN × Regressão Logística, com e sem padronização | O SVM supera os dois, por pouco; KNN e SVM pioram sem padronizar | Confirmada: SVM 92,6%, Logística 91,8%, KNN 91,1%. Sem padronizar, o KNN cai para 81,5% |
 | E5: análise de erros | | Erros concentrados em confrontos decididos pela sorte e em duelos de nocaute em 1 golpe |
 
 **Modelo final (v2):** SVM RBF, 15 features, **92,6%** de acurácia e ROC-AUC 0,977 no teste, salvo em
@@ -159,7 +166,7 @@ dados do PokéAPI.
 | Model Card | [PDF](docs/entregas/Model_Card.pdf) |
 | Ficha de experimentos | [PDF](docs/entregas/Ficha_de_Experimentos.pdf) |
 | Folder | [PDF](docs/entregas/folder/Folder_Arena_SVM.pdf) |
-| Carrossel do Instagram | [cards e legenda](docs/entregas/instagram) |
+| Instagram | [@arena.svm](https://www.instagram.com/arena.svm/) · [cards e legenda](docs/entregas/instagram) |
 | Jogo online | https://arena-svm.onrender.com |
 | Vídeo demonstrativo | [roteiro](docs/entregas/video/roteiro_video.md) · link do vídeo: a publicar |
 | Referências e artigos | [referências](docs/referencias.md) · [artigos](docs/artigos) |

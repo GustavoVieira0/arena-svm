@@ -25,6 +25,7 @@ RAIZ = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(RAIZ / "src"))
 sys.path.insert(0, str(Path(__file__).parent))
 from explicacao import Explicador  # noqa: E402
+from laboratorio import TIPOS, ErroEntrada, Laboratorio  # noqa: E402
 from features import Extrator  # noqa: E402
 from simulador import batalha, candidatos, simular_confronto  # noqa: E402
 
@@ -44,6 +45,7 @@ modelo = joblib.load(RAIZ / "modelos/svm_duelo_v2.joblib")
 COLUNAS = json.load(open(RAIZ / "modelos/svm_duelo_v2.json"))["features"]
 batalhas_base = pd.read_csv(RAIZ / "data/processed/batalhas.csv")
 explicador = Explicador(modelo, COLUNAS, batalhas_base, info["name"])
+lab = Laboratorio(extrator, modelo, COLUNAS, explicador, info)
 
 # Confrontos que existem na base: (a_id, b_id) -> grupo, vitórias de A e nº de simulações.
 # Guarda as duas ordens (A×B e B×A), invertendo as vitórias, para achar o confronto de qualquer lado.
@@ -265,6 +267,35 @@ def revanche(codigo):
                 x["pronto"] = False
             sala["versao"] += 1
         return jsonify(estado_sala(sala, corpo.get("token")))
+
+
+@app.get("/laboratorio")
+def pagina_laboratorio():
+    return send_from_directory(app.static_folder, "laboratorio.html")
+
+
+@app.get("/api/laboratorio/tipos")
+def lab_tipos():
+    return jsonify(TIPOS)
+
+
+@app.post("/api/laboratorio/prever")
+def lab_prever():
+    corpo = request.get_json(silent=True) or {}
+    try:
+        return jsonify(lab.prever(corpo.get("a"), corpo.get("b"),
+                                  corpo.get("eixo_x", "dif_Speed"), corpo.get("eixo_y", "dif_Attack")))
+    except ErroEntrada as e:
+        return jsonify({"erro": str(e)}), 400
+
+
+@app.post("/api/laboratorio/simular")
+def lab_simular():
+    corpo = request.get_json(silent=True) or {}
+    try:
+        return jsonify(lab.simular(corpo.get("a"), corpo.get("b")))
+    except ErroEntrada as e:
+        return jsonify({"erro": str(e)}), 400
 
 
 if __name__ == "__main__":
