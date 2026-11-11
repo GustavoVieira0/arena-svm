@@ -15,7 +15,7 @@ ATRIBUTOS = ["HP", "Attack", "Defense", "Sp. Atk", "Sp. Def", "Speed"]
 TIPOS = sorted(set(NOMES_TIPOS.tolist()) - {"Stellar", "Unknown", "Shadow"})
 # eixos permitidos no corte 2D: diferenças de atributos (A − B)
 EIXOS = {f"dif_{a}": a for a in ATRIBUTOS}
-FAIXA, PASSOS = 200, 25          # 25 × 25 pontos: rápido o bastante para atualizar ao vivo
+FAIXA, PASSOS = 200, 17          # 17 × 17 pontos (suavizados na tela): leve o bastante para atualizar ao vivo
 
 
 class ErroEntrada(ValueError):
