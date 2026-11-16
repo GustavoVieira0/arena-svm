@@ -7,7 +7,7 @@
 | Resumo expandido (2 páginas) | [`../jornada/Resumo_Jornada_2026_Arena_SVM.pdf`](../jornada/Resumo_Jornada_2026_Arena_SVM.pdf) | Falta o e-mail do orientador |
 | Folder (8 painéis, dobra em sanfona) | [`folder/Folder_Arena_SVM.pdf`](folder/Folder_Arena_SVM.pdf) | Pronto para imprimir |
 | Instagram (carrossel) | [`instagram/`](instagram) · 6 cards + [`legenda.md`](instagram/legenda.md) | Pronto para postar |
-| Vídeo (1 a 3 min) | [`video/roteiro_video.md`](video/roteiro_video.md) | Roteiro pronto; falta gravar |
+| Vídeo (1 a 3 min) | [`video/Video_Arena_SVM.mp4`](video/Video_Arena_SVM.mp4) · [roteiro](video/roteiro_video.md) | Pronto (2:31) |
 | Model Card (1 página) | [`Model_Card.pdf`](Model_Card.pdf) · [`.docx`](Model_Card.docx) | Pronto |
 | Ficha de experimentos | [`Ficha_de_Experimentos.pdf`](Ficha_de_Experimentos.pdf) · [`.docx`](Ficha_de_Experimentos.docx) | Pronto |
 | Palestra (~30 min) | [`palestra/Arena_SVM_Palestra.pptx`](palestra/Arena_SVM_Palestra.pptx) · [falas](palestra/falas_por_integrante.md) · [roteiro](palestra/roteiro_palestra.md) | Pronto (falta ensaiar) |

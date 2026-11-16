@@ -168,7 +168,7 @@ dados do PokéAPI.
 | Folder | [PDF](docs/entregas/folder/Folder_Arena_SVM.pdf) |
 | Instagram | [@arena.svm](https://www.instagram.com/arena.svm/) · [cards e legenda](docs/entregas/instagram) |
 | Jogo online | https://arena-svm.onrender.com |
-| Vídeo demonstrativo | [roteiro](docs/entregas/video/roteiro_video.md) · link do vídeo: a publicar |
+| Vídeo demonstrativo | [Video_Arena_SVM.mp4](docs/entregas/video/Video_Arena_SVM.mp4) (2:31) · [roteiro](docs/entregas/video/roteiro_video.md) |
 | Referências e artigos | [referências](docs/referencias.md) · [artigos](docs/artigos) |
 
 ## Uso de IA
